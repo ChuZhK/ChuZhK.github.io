@@ -1,0 +1,513 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+<meta name="x5-fullscreen" content="true">
+<meta name="full-screen" content="yes">
+<meta name="theme-color" content="#317EFB" />
+<meta content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=0" name="viewport">
+<meta name="description" content="旅行商问题一、问题背景分析售货员经过n个城市，每个城市 只经过一次并最终返回起点 城市，可以将问题抽象为一个带权有向图的遍历问题，这要找出能够遍历图中每个节点并且总权值最小的路径即可。这一类问题可以使用 贪心算法、动态规划、遗传算法 等进行求解。TSP问题的贪心算法在课程学习中的作业题已经有所涉及，这里本着探索尝试更多算法的想法，在较低维度下使用动态规划求解最优解，当维度更高时尝试使用遗传算法进行">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Hexo">
+<meta property="og:url" content="http://example.com/2023/03/14/hello-world/index.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="旅行商问题一、问题背景分析售货员经过n个城市，每个城市 只经过一次并最终返回起点 城市，可以将问题抽象为一个带权有向图的遍历问题，这要找出能够遍历图中每个节点并且总权值最小的路径即可。这一类问题可以使用 贪心算法、动态规划、遗传算法 等进行求解。TSP问题的贪心算法在课程学习中的作业题已经有所涉及，这里本着探索尝试更多算法的想法，在较低维度下使用动态规划求解最优解，当维度更高时尝试使用遗传算法进行">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="http://example.com/img/404.jpg">
+<meta property="og:image" content="http://example.com/img/404.jpg">
+<meta property="og:image" content="http://example.com/img/404.jpg">
+<meta property="og:image" content="http://example.com/img/404.jpg">
+<meta property="og:image" content="http://example.com/img/404.jpg">
+<meta property="og:image" content="http://example.com/img/404.jpg">
+<meta property="article:published_time" content="2023-03-14T14:53:55.693Z">
+<meta property="article:modified_time" content="2023-03-14T15:06:05.349Z">
+<meta property="article:author" content="John Doe">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://example.com/img/404.jpg">
+
+
+<title >Hexo</title>
+
+<!-- Favicon -->
+
+    <link href='/img/favicon.svg?v=2.0.3' rel='icon' type='image/png' sizes='16x16' ></link>
+
+
+    <link href='/img/favicon.svg?v=2.0.3' rel='icon' type='image/png' sizes='32x32' ></link>
+
+
+
+
+<!-- Plugin -->
+
+
+
+
+    
+<link rel="stylesheet" href="/css/plugins/bootstrap.row.css">
+
+    
+<link rel="stylesheet" href="https://unpkg.com/locomotive-scroll@4.1.4/dist/locomotive-scroll.min.css">
+
+    
+<link rel="stylesheet" href="https://unpkg.com/@fancyapps/ui@4.0/dist/fancybox.css">
+
+    
+    
+
+
+
+
+<!-- Icon -->
+
+    
+<link rel="stylesheet" href="/css/plugins/font-awesome.min.css">
+
+
+
+
+<!-- Variable -->
+<script>window.ASYNC_CONFIG = {"hostname":"example.com","author":"John Doe","root":"/","typed_text":null,"theme_version":"2.0.3","theme":{"switch":true,"default":"style-light"},"favicon":{"logo":"/img/favicon.svg","icon16":"/img/favicon.svg","icon32":"/img/favicon.svg","appleTouchIcon":null,"webmanifest":null,"visibilitychange":false,"hidden":"/failure.ico","showText":"(/≧▽≦/)Hey! Good again!","hideText":"(●—●)Oh, crash!"},"i18n":{"placeholder":"Searching...","empty":"We didn't find any results for the search: ${query}.","hits":"${hits} results found","hits_time":"${hits} results found in ${time} ms","author":"Post author: ","copyright_link":"Post link: ","copyright_license_title":"Copyright Notice: ","copyright_license_content":"All articles in this blog are licensed under undefined unless otherwise stated.","copy_success":"Copied","copy_failure":"Copy failed","open_read_mode":"Enter reading mode","exit_read_mode":"Exit reading mode","notice_outdate_message":"It has been undefined days since the last update, the content of the article may be outdated.","just":"Just","min":"minutes ago","hour":"hours ago","day":"days ago","month":"months ago"},"swup":false,"plugin":{"flickr_justified_gallery":"https://unpkg.com/flickr-justified-gallery@latest/dist/fjGallery.min.js"},"icons":{"sun":"far fa-sun","moon":"far fa-moon","play":"fas fa-play","email":"far fa-envelope","next":"fas fa-arrow-right","calendar":"far fa-calendar-alt","clock":"far fa-clock","user":"far fa-user","back_top":"fas fa-arrow-up","close":"fas fa-times","search":"fas fa-search","reward":"fas fa-hand-holding-usd","user_tag":"fas fa-user-alt","toc_tag":"fas fa-th-list","read":"fas fa-book-reader","arrows":"fas fa-arrows-alt-h","double_arrows":"fas fa-angle-double-down","copy":"fas fa-copy"},"icontype":"font","highlight":{"plugin":"highlighjs","theme":true,"copy":true,"lang":true,"title":"default","height_limit":false}};</script>
+<script id="async-page-config">window.PAGE_CONFIG = {"isPost":true,"isHome":false,"postUpdate":"2023-03-14 23:06:05"};</script>
+
+<!-- Theme mode css -->
+<link data-swup-theme rel="stylesheet" href="/css/index.css?v=2.0.3" id="trm-switch-style">
+<script>
+    let defaultMode = ASYNC_CONFIG.theme.default !=='auto' ?  ASYNC_CONFIG.theme.default : (window.matchMedia("(prefers-color-scheme: light)").matches ? 'style-light' : 'style-dark')
+    let catchMode = localStorage.getItem('theme-mode') || defaultMode;
+    let type = catchMode === 'style-dark' ? 'add' : 'remove';
+    document.documentElement.classList[type]('dark')
+</script>
+
+<!-- CDN -->
+
+
+    
+    
+
+
+
+<!-- Site Analytics -->
+ 
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+<body>
+
+  <!-- app wrapper -->
+  <div class="trm-app-frame">
+
+    <!-- page preloader -->
+    <div class="trm-preloader">
+    <div class="trm-holder">
+        <div class="preloader">
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+        </div>
+    </div>
+</div>
+    <!-- page preloader end -->
+
+    <!-- change mode preloader -->
+    <div class="trm-mode-swich-animation-frame">
+    <div class="trm-mode-swich-animation">
+        <i class="i-sun"><i class="iconfont far fa-sun"></i></i>
+        <div class="trm-horizon"></div>
+        <i class="i-moon"><i class="iconfont far fa-moon"></i></i>
+    </div>
+</div>
+    <!-- change mode preloader end -->
+
+      <!-- scroll container -->
+      <div id="trm-dynamic-content" class="trm-swup-animation">
+        <div id="trm-scroll-container" class="trm-scroll-container" data-scroll-container style="opacity: 0">
+          <div data-scroll-section id="content" class="trm-scroll-section">
+
+            <div class="locomotive-scroll__sticky-target" style="position: absolute; top: 0; left: 0; right: 0; bottom: 0; pointer-events: none;"></div>
+
+            <!-- top bar -->
+            <header class="trm-top-bar" data-scroll data-scroll-sticky data-scroll-target=".locomotive-scroll__sticky-target" data-scroll-offset="-10">
+	<div class="container">
+		<div class="trm-left-side">
+			<!-- logo -->
+<a href="/" class="trm-logo-frame trm-anima-link">
+    
+        <img alt="logo" src="/img/favicon.svg">
+    
+    
+        <div class="trm-logo-text">
+            Async<span>Theme</span>
+        </div>
+    
+</a>
+<!-- logo end -->
+		</div>
+		<div class="trm-right-side">
+			<!-- menu -->
+<div class="trm-menu">
+    <nav>
+        <ul>
+            
+            <li class="menu-item-has-children ">
+                <a  href="/" target="">
+                    Home
+                </a>
+                
+            </li>
+            
+            <li class="menu-item-has-children ">
+                <a  href="/archives/" target="">
+                    Archives
+                </a>
+                
+            </li>
+            
+        </ul>
+    </nav>
+</div>
+<!-- menu end -->
+			
+    <!-- mode switcher place -->
+    <div class="trm-mode-switcher-place">
+        <div class="trm-mode-switcher">
+            <i class="iconfont far fa-sun"></i>
+            <input class="tgl tgl-light" id="trm-swich" type="checkbox">
+            <label class="trm-swich" for="trm-swich"></label>
+            <i class="iconfont far fa-moon"></i>
+        </div>
+    </div>
+    <!-- mode switcher place end -->
+
+			
+		</div>
+		<div class="trm-menu-btn">
+			<span></span>
+		</div>
+	</div>
+</header>
+            <!-- top bar end -->
+
+            <!-- body -->
+            
+<div class="trm-content-start">
+    <!-- banner -->
+    <div class="trm-banner" data-scroll data-scroll-direction="vertical">
+    
+    <!-- banner cover -->
+    <img style="object-position:top;object-fit:cover;" alt="banner" class="trm-banner-cover" data-scroll data-scroll-direction="vertical" data-scroll-speed="-3" src="/img/banner.png">
+    <!-- banner cover end -->
+    
+
+    <!-- banner content -->
+    <div class="trm-banner-content trm-overlay">
+        <div class="container" data-scroll data-scroll-direction="vertical" data-scroll-speed="0">
+            <div class="row">
+                
+                <div class="col-lg-4"></div>
+                
+                <div class="col-lg-8">
+
+                    <!-- banner title -->
+                    <div class="trm-banner-text ">
+                        <div class="trm-label trm-mb-20">
+                            NEWS LETTER
+                        </div>
+                        <h1 class="trm-mb-30 trm-hsmb-font">
+                            
+                        </h1>
+
+                        
+                            <ul class="trm-breadcrumbs trm-label">
+                                <li>
+                                    <a href="/" class="trm-anima-link">Home</a>
+                                </li>
+                                <li>
+                                    <span>
+                                        2023
+                                    </span
+                                ></li>
+                            </ul>
+                        
+                    </div>
+                    <!-- banner title end -->
+
+                    <!-- scroll hint -->
+                    <a href="#about-triger" data-scroll-to="#about-triger" data-scroll-offset="-130" class="trm-scroll-hint-frame">
+                        <div class="trm-scroll-hint"></div>
+                        <span class="trm-label">Scroll down</span>
+                    </a>
+                    <!-- scroll hint end -->
+
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- banner content end -->
+</div>
+    <!-- banner end -->
+    <div class="container">
+        <div class="row">
+            
+                <div id="page-sidebar" class="col-lg-4 hidden-sm">
+                    <!-- main card -->
+                    
+
+<div class="trm-main-card-frame trm-sidebar">
+    <div class="trm-main-card" data-scroll data-scroll-repeat data-scroll-sticky data-scroll-target=".locomotive-scroll__sticky-target" data-scroll-offset="60"> 
+    
+        <!-- card header -->
+<div class="trm-mc-header">
+    <div class="trm-avatar-frame trm-mb-20">
+        <img alt="Avatar" class="trm-avatar" src="/img/avatar.jpg">
+    </div>
+    <h5 class="trm-name trm-mb-15">
+        ThemeAsync
+    </h5>
+    
+</div>
+<!-- card header end -->
+        <!-- sidebar social -->
+
+<div class="trm-divider trm-mb-40 trm-mt-40"></div>
+<div class="trm-social">
+    
+        <a href="https://github.com" title="Github" rel="nofollow" target="_blank">
+            <i class="iconfont fab fa-github"></i>
+        </a>
+    
+</div>
+
+<!-- sidebar social end -->
+        <!-- info -->
+<div class="trm-divider trm-mb-40 trm-mt-40"></div>
+<ul class="trm-table trm-mb-20">
+    
+        <li>
+            <div class="trm-label">
+                Residence:
+            </div>
+            <div class="trm-label trm-label-light">
+                Mars
+            </div>
+        </li>
+    
+</ul>
+<!-- info end -->
+
+        
+    
+    </div>
+</div>
+                    <!-- main card end -->
+                </div>
+            
+            <div id="page-content" class="col-lg-8">
+                <div class="trm-content" id="trm-content">
+                    <div data-scroll data-scroll-repeat data-scroll-offset="500" id="about-triger"></div>
+
+                    <div id="post-info" class="row hidden-sm">
+    <div class="col-sm-4">
+        <div class="trm-card trm-label trm-label-light text-center">
+            <i class="iconfont far fa-calendar-alt trm-icon"></i><br>
+            03/14
+        </div>
+    </div>
+    <div class="col-sm-4">
+        <div class="trm-card trm-label trm-label-light text-center">
+            <i class="iconfont far fa-clock trm-icon"></i><br>
+            22:53
+        </div>
+    </div>
+    <div class="col-sm-4">
+        <div id="post-author" class="trm-card trm-label trm-label-light text-center">
+            <i class="iconfont far fa-user trm-icon"></i><br>
+            John Doe
+        </div>
+    </div>
+</div>
+<div class="trm-card ">
+    <article id="article-container" class="trm-publication">
+    <h1 id="旅行商问题"><a href="#旅行商问题" class="headerlink" title="旅行商问题"></a>旅行商问题</h1><h2 id="一、问题背景分析"><a href="#一、问题背景分析" class="headerlink" title="一、问题背景分析"></a>一、问题背景分析</h2><p>售货员经过n个城市，每个城市 <strong>只经过一次并最终返回起点</strong> 城市，可以将问题抽象为一个带权有向图的遍历问题，这要找出能够遍历图中每个节点并且总权值最小的路径即可。<br>这一类问题可以使用 <strong>贪心算法、动态规划、遗传算法</strong> 等进行求解。<br>TSP问题的贪心算法在课程学习中的作业题已经有所涉及，这里本着探索尝试更多算法的想法，在较低维度下使用动态规划求解最优解，当维度更高时尝试使用遗传算法进行求解。</p>
+<h2 id="二、解题思路分析"><a href="#二、解题思路分析" class="headerlink" title="二、解题思路分析"></a>二、解题思路分析</h2><h3 id="（一）-动态规划算法求解最短路径"><a href="#（一）-动态规划算法求解最短路径" class="headerlink" title="（一） 动态规划算法求解最短路径"></a>（一） 动态规划算法求解最短路径</h3><p><img src="/./FILES/%E6%97%85%E8%A1%8C%E5%95%86%E9%97%AE%E9%A2%98.md/img-20220704160709.png" alt="Img" loading="lazy" onerror='this.onerror=null;this.src="/img/404.jpg"'><br><strong>1.  将问题拆分为子问题</strong><br>商人从广州出发，其他6个城市都有可能成为第一个到达的城市，那么可以将问题分解为 <strong>第一个到达城市为A，剩下的城市依次遍历并最终返回广州</strong> ，根据题意这里第一个到达的城市可能是佛山、深圳、珠海、汕头、湛江之一，那么原问题就被分解为第一个到达佛山、深圳、珠海、汕头、湛江、韶关，剩余城市依次遍历这样的6个子问题。<br><strong>子问题和原问题一样，在给定的城市中寻找最短路径</strong> ，因此子问题还可以继续分解下去。</p>
+<p><strong>2.相关问题的表示</strong><br>设集合V表示，剩余需要依次遍历的城市，表达式 <strong>d(s,V)</strong> 表示从点s出发，依次遍历集合V中的城市并最终返回结点s的最短路径。<br>根据上面的子问题拆解思路，可以写出此问题的动态规划方程：<br><img src="/./FILES/%E6%97%85%E8%A1%8C%E5%95%86%E9%97%AE%E9%A2%98.md/img-20220704163011.png" alt="Img" loading="lazy" onerror='this.onerror=null;this.src="/img/404.jpg"'><br>将具体的 <strong>求解思路</strong> 进行图形展示如下：<br>以四个城市为例，城市0为起点城市，根据 <strong>动态规划方程</strong> 不断求解</p>
+<p><img src="/./FILES/%E6%97%85%E8%A1%8C%E5%95%86%E9%97%AE%E9%A2%98.md/%E6%9C%AA%E5%91%BD%E5%90%8D%E7%BB%98%E5%9B%BE.drawio.svg" alt="Img" loading="lazy" onerror='this.onerror=null;this.src="/img/404.jpg"'></p>
+<p><strong>3.城市集合的编码表示方法</strong><br>假设有N个城市，那么就取N位二进制数，二进制数上的第i位为0就代表这个城市不在集合中，为1代表城市在集合中。最后将二进制数转化为十进制数，用十进制数的数值来表示集合。这样城市集合就变成数字而且被唯一表示<br>对于本题所给情况可以将0~6共7个城市依次代表 广州、佛山、深圳、珠海、韶关、汕头、湛江。</p>
+<p><strong>4.动态规划的时间复杂度分析</strong><br>由于将城市集合使用二进制编码方式表示，因此动态规划中状态数组就需要 N*2^(N-1) 个大小，数组的第一列就是从广州出发到各个城市的距离，后面的每一列都需要在循环中根据动态规划方程得到，__每一列的数组更新需要两层for循环__，因此 <strong>总的时间复杂度为 n^2 * 2^n</strong></p>
+<h3 id="（二）-贪心算法求多城市近似最优解"><a href="#（二）-贪心算法求多城市近似最优解" class="headerlink" title="（二） 贪心算法求多城市近似最优解"></a>（二） 贪心算法求多城市近似最优解</h3><p>当城市变多时，动态规划算法的时间复杂度变得十分巨大，因此在所学知识范围内我选择使用贪心算法求多个城市之间的近似最优解。<br>由于已经实现了城市数量较少情况下的动态规划解法，现在再创建一个继承自动态规划算法类的贪心算法类即可实现数据的复用，节省代码工作量提高整洁度。</p>
+<blockquote>
+<p>针对TSP问题，使用贪心算法的求解的过程为：<br>1.从某一个城市开始，每次选择一个城市，直到所有的城市被走完。<br>2.每次在选择下一个城市的时候，只考虑当前情况，保证迄今为止经过的路径总距离最小。</p>
+</blockquote>
+<h2 id="三、代码实现"><a href="#三、代码实现" class="headerlink" title="三、代码实现"></a>三、代码实现</h2><h3 id="（一）-动态规划算法实现"><a href="#（一）-动态规划算法实现" class="headerlink" title="（一） 动态规划算法实现"></a>（一） 动态规划算法实现</h3><ol>
+<li>TSP类的数据结构<blockquote>
+<p>两个数组：城市间的距离矩阵、动态规划数组<br>两个整型变量：距离矩阵的维度、动态规划数组的列数<br>用来存储最终解的vector容器</p>
+</blockquote>
+</li>
+</ol>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">int</span>** Arr;  <span class="comment">//距离矩阵 </span></span><br><span class="line"><span class="type">int</span> N;       <span class="comment">//矩阵维度数 </span></span><br><span class="line"><span class="type">int</span>** dp;   <span class="comment">//动态规划数组 </span></span><br><span class="line"><span class="type">int</span> M;      <span class="comment">//动态规划数组的列数 </span></span><br><span class="line"><span class="built_in">vector</span>&lt;<span class="type">int</span>&gt; path;</span><br></pre></td></tr></table></figure>
+<ol start="2">
+<li>数据初始化 （TSP类的构造函数）<br>该函数主要是让用户输入距离矩阵的下三角矩阵，根据用户的输入以及矩阵对称性自动生成距离矩阵。<br>同时， __将距离矩阵的第一列赋值到动态规划数组的第一列中去__。<br>代码如下：<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line">TSP()&#123;</span><br><span class="line">    <span class="built_in">cout</span>&lt;&lt;<span class="string">&quot;请输入有几个城市：&quot;</span>&lt;&lt;<span class="built_in">endl</span>;</span><br><span class="line">    <span class="type">int</span> n;</span><br><span class="line">    <span class="built_in">cin</span>&gt;&gt;n;</span><br><span class="line"></span><br><span class="line">    N=n;</span><br><span class="line">    M=<span class="number">1</span>&lt;&lt;(N<span class="number">-1</span>); </span><br><span class="line">    <span class="built_in">cout</span>&lt;&lt;<span class="string">&quot;M:  &quot;</span>&lt;&lt;M&lt;&lt;<span class="built_in">endl</span>;</span><br><span class="line">    Arr=new <span class="type">int</span>* [n];  <span class="comment">//输入的距离矩阵 </span></span><br><span class="line">    dp=new <span class="type">int</span>* [n];  <span class="comment">//动态规划数组 </span></span><br><span class="line">    <span class="keyword">for</span>(<span class="type">int</span> i=<span class="number">0</span>;i&lt;n;i++)&#123;</span><br><span class="line">    	(Arr[i])=new <span class="type">int</span>[n];</span><br><span class="line">    	dp[i]=new <span class="type">int</span>[M]; </span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="built_in">cout</span>&lt;&lt;<span class="string">&quot;请依次输入距离矩阵的下三角元素（每一行之间使用回车分割，行内元素空格分隔）&quot;</span>&lt;&lt;<span class="built_in">endl</span>;</span><br><span class="line">    <span class="keyword">for</span>(<span class="type">int</span> a=<span class="number">0</span>;a&lt;n;a++)&#123;</span><br><span class="line">    	<span class="keyword">for</span>(<span class="type">int</span> j=<span class="number">0</span>;j&lt;a;j++)&#123;</span><br><span class="line">    	    <span class="built_in">cin</span>&gt;&gt;(Arr[a][j]);</span><br><span class="line">    	    Arr[j][a]=Arr[a][j];</span><br><span class="line">    	&#125;</span><br><span class="line">    	Arr[a][a]=<span class="number">0</span>;</span><br><span class="line">    &#125;</span><br><span class="line">	</span><br><span class="line">    <span class="comment">//初始化动态规划数组的第一列 </span></span><br><span class="line">    <span class="keyword">for</span>(<span class="type">int</span> i=<span class="number">0</span>;i&lt;n;i++)&#123;</span><br><span class="line">    	dp[i][<span class="number">0</span>]=Arr[i][<span class="number">0</span>];</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></li>
+<li>根据动态规划方程进行求解<br><strong>求解过程就是根据动态规划方程来将动态规划数组进行逐列的更新。</strong><br>补充说明：对于一个城市a，检验其是否在城市集合V中的代码实现是，将a对应的二进制位与城市集合中对应的二进制位进按位行与操作，如果最终结果为1的话就证明城市集合中存在这个城市。<br>代码如下：<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//求动态规划dp数组</span></span><br><span class="line"><span class="type">void</span> <span class="title function_">TSP_fun</span><span class="params">()</span>&#123;</span><br><span class="line">	</span><br><span class="line">    <span class="comment">//求解dp[i][j],先更新列再更新行</span></span><br><span class="line">    <span class="keyword">for</span>(<span class="type">int</span> j = <span class="number">1</span> ; j &lt; M ;j++)&#123;</span><br><span class="line">        <span class="keyword">for</span>(<span class="type">int</span> i = <span class="number">0</span> ; i &lt; N ;i++ )&#123;</span><br><span class="line">            dp[i][j] = INF;</span><br><span class="line">            <span class="comment">//如果城市集合j(或状态j)中包含城市结点i,则不符合条件退出</span></span><br><span class="line">            <span class="keyword">if</span>( ((j &gt;&gt; (i<span class="number">-1</span>)) &amp; <span class="number">1</span>) == <span class="number">1</span>)&#123;</span><br><span class="line">                <span class="keyword">continue</span>;</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">for</span>(<span class="type">int</span> k = <span class="number">1</span> ; k &lt; N ; k++)&#123;</span><br><span class="line">                <span class="keyword">if</span>( ((j &gt;&gt; (k<span class="number">-1</span>)) &amp; <span class="number">1</span>) == <span class="number">0</span>)&#123;</span><br><span class="line">                    <span class="keyword">continue</span>;</span><br><span class="line">                &#125;</span><br><span class="line">                <span class="comment">//如果动态规划数组中的状态大于当前状态时更新数组</span></span><br><span class="line">                <span class="keyword">if</span>( dp[i][j] &gt; Arr[i][k] + dp[k][j^(<span class="number">1</span>&lt;&lt;(k<span class="number">-1</span>))])&#123;</span><br><span class="line">                    dp[i][j] = Arr[i][k] + dp[k][j^(<span class="number">1</span>&lt;&lt;(k<span class="number">-1</span>))];</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"> </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></li>
+<li>将最优路径保存在path中<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//求动态规划dp数组</span></span><br><span class="line"><span class="type">void</span> <span class="title function_">TSP_fun</span><span class="params">()</span>&#123;</span><br><span class="line">	</span><br><span class="line">    <span class="comment">//求解dp[i][j],先更新列再更新行</span></span><br><span class="line">    <span class="keyword">for</span>(<span class="type">int</span> j = <span class="number">1</span> ; j &lt; M ;j++)&#123;</span><br><span class="line">        <span class="keyword">for</span>(<span class="type">int</span> i = <span class="number">0</span> ; i &lt; N ;i++ )&#123;</span><br><span class="line">            dp[i][j] = INF;</span><br><span class="line">            <span class="comment">//如果城市集合j(或状态j)中包含城市结点i,则不符合条件退出</span></span><br><span class="line">            <span class="keyword">if</span>( ((j &gt;&gt; (i<span class="number">-1</span>)) &amp; <span class="number">1</span>) == <span class="number">1</span>)&#123;</span><br><span class="line">                <span class="keyword">continue</span>;</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">for</span>(<span class="type">int</span> k = <span class="number">1</span> ; k &lt; N ; k++)&#123;</span><br><span class="line">                <span class="keyword">if</span>( ((j &gt;&gt; (k<span class="number">-1</span>)) &amp; <span class="number">1</span>) == <span class="number">0</span>)&#123;</span><br><span class="line">                    <span class="keyword">continue</span>;</span><br><span class="line">                &#125;</span><br><span class="line">                <span class="keyword">if</span>( dp[i][j] &gt; Arr[i][k] + dp[k][j^(<span class="number">1</span>&lt;&lt;(k<span class="number">-1</span>))])&#123;</span><br><span class="line">                    dp[i][j] = Arr[i][k] + dp[k][j^(<span class="number">1</span>&lt;&lt;(k<span class="number">-1</span>))];</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"> </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></li>
+</ol>
+<h3 id="二-贪心算法实现"><a href="#二-贪心算法实现" class="headerlink" title="(二) 贪心算法实现"></a>(二) 贪心算法实现</h3><ol>
+<li><p>数据结构</p>
+<blockquote>
+<p>一个整型数组用于存储已经访问过的结点城市<br>一个整数用于记录路径和<br>一个整数充当标记位，值为0代表节点未被访问，为1代表已经被访问。</p>
+</blockquote>
+</li>
+<li><p>具体实现过程</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">void</span> <span class="title function_">Greedy_fun</span><span class="params">()</span>&#123; </span><br><span class="line">i = <span class="number">1</span>;<span class="comment">//i是至今已访问过的城市</span></span><br><span class="line">S[<span class="number">0</span>] = <span class="number">0</span>;</span><br><span class="line"><span class="keyword">do</span>&#123;</span><br><span class="line">    k = <span class="number">1</span>;</span><br><span class="line">	Dtemp = INF;</span><br><span class="line">    <span class="keyword">do</span>&#123;</span><br><span class="line">        l = <span class="number">0</span>;</span><br><span class="line">		visited = <span class="number">0</span>;</span><br><span class="line">        <span class="keyword">do</span>&#123;</span><br><span class="line">            <span class="keyword">if</span>(S[l] == k)&#123;<span class="comment">//判断该城市是否已被访问过，若被访问过，</span></span><br><span class="line">                visited= <span class="number">1</span>;<span class="comment">//则flag为1</span></span><br><span class="line">                <span class="keyword">break</span>;<span class="comment">//跳出循环，不参与距离的比较</span></span><br><span class="line">            &#125;<span class="keyword">else</span></span><br><span class="line">                l++;</span><br><span class="line">        &#125;<span class="keyword">while</span>(l &lt; i);</span><br><span class="line">        <span class="keyword">if</span>(visited == <span class="number">0</span>&amp;&amp;Arr[k][S[i - <span class="number">1</span>]] &lt; Dtemp)&#123;<span class="comment">/*D[k][S[i - 1]]表示当前未被访问的城市k与上一个已访问过的城市i-1之间的距离*/</span></span><br><span class="line">            j = k;<span class="comment">//j用于存储已访问过的城市k</span></span><br><span class="line">            Dtemp = Arr[k][S[i - <span class="number">1</span>]];<span class="comment">//Dtemp用于暂时存储当前最小路径的值</span></span><br><span class="line">        &#125;</span><br><span class="line">        k++;</span><br><span class="line">    &#125;<span class="keyword">while</span>(k &lt; N);</span><br><span class="line">    S[i] = j;<span class="comment">//将已访问过的城市j存入到S[i]中</span></span><br><span class="line">    i++;</span><br><span class="line">    sum += Dtemp;<span class="comment">//求出各城市之间的最短距离，注意：在结束循环时，该旅行商尚未回到原出发的城市</span></span><br><span class="line">&#125;<span class="keyword">while</span>(i &lt; N);</span><br><span class="line">sum += Arr[<span class="number">0</span>][j];<span class="comment">//D[0][j]为旅行商所在的最后一个城市与原出发的城市之间的距离</span></span><br><span class="line"><span class="built_in">string</span> arr[<span class="number">7</span>]=&#123;<span class="string">&quot;广州&quot;</span>,<span class="string">&quot;佛山&quot;</span>,<span class="string">&quot;深圳&quot;</span>,<span class="string">&quot;珠海&quot;</span>,<span class="string">&quot;韶关&quot;</span>,<span class="string">&quot;汕头&quot;</span>,<span class="string">&quot;湛江&quot;</span>&#125;;</span><br><span class="line"><span class="keyword">for</span>(j = <span class="number">0</span>; j &lt; N; j++)&#123; <span class="comment">//输出经过的城市的路径</span></span><br><span class="line">    <span class="built_in">cout</span>&lt;&lt;arr[j]&lt;&lt;<span class="string">&quot; --&gt; &quot;</span>;</span><br><span class="line">&#125;</span><br><span class="line"><span class="built_in">cout</span>&lt;&lt;<span class="string">&quot;广州&quot;</span>&lt;&lt;<span class="built_in">endl</span>;</span><br><span class="line"><span class="built_in">cout</span>&lt;&lt;<span class="string">&quot;\n总距离为：&quot;</span>&lt;&lt;sum;<span class="comment">//求出最短路径的值</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></li>
+</ol>
+<h2 id="四、最终效果"><a href="#四、最终效果" class="headerlink" title="四、最终效果"></a>四、最终效果</h2><ol>
+<li><p>输入距离矩阵<br><img src="/./FILES/%E6%97%85%E8%A1%8C%E5%95%86%E9%97%AE%E9%A2%98.md/img-20220704214717.png" alt="Img" loading="lazy" onerror='this.onerror=null;this.src="/img/404.jpg"'></p>
+</li>
+<li><p>输出结果如下：<br><img src="/./FILES/%E6%97%85%E8%A1%8C%E5%95%86%E9%97%AE%E9%A2%98.md/img-20220704214943.png" alt="Img" loading="lazy" onerror='this.onerror=null;this.src="/img/404.jpg"'></p>
+</li>
+</ol>
+<p>3.贪心算法的近似解如下：<br><img src="/./FILES/%E6%97%85%E8%A1%8C%E5%95%86%E9%97%AE%E9%A2%98.md/img-20220704225450.png" alt="Img" loading="lazy" onerror='this.onerror=null;this.src="/img/404.jpg"'></p>
+<h2 id="五、心得体会"><a href="#五、心得体会" class="headerlink" title="五、心得体会"></a>五、心得体会</h2><ol>
+<li>在尝试解决TSP问题的时候，一开始显得手足无措，从书上的例子开始逐行研究代码内部的逻辑以后，对与TSP的解决有了一点信心和感觉，随后开始在网上查找资料，花费了较长的时间去学习动态规划的思路，在阅读了大量的博客和观看相关视频后有了一点思路，信心也得到增强，但当我开始着手写代码的时候还是被卡住了。深刻意识到算法逻辑思路和实现之间还是存在一定距离的，只有动手去实践才能更好的理解和运用算法逻辑。</li>
+<li>在这次作业中，体会到了DP算法将主问题划分为子问题的强大，更加多的理解到DP算法解决最大值、最小值这类问题的具体方法步骤。</li>
+<li>同时，在编写代码中难免存在各种各样的bug，这些bug有的是语法错误有的是逻辑错误，往往在某些很细节的bug上花费了大量时间，比如在将动态规划方法封装成类的时候，忘记了dp数组是类的成员变量，在成员函数中又重新申明了一个dp数组，那么在这个成员函数的作用域中对dp数组的操作永远都是优先对成员函数局部变量的操作，而不是对类的成员变量dp数组的操作，这使得我在代码本身逻辑正确的情况下花费大量时间去检查算法实现逻辑。</li>
+<li>最后，通过一个人查阅资料学习视频最终独立解决问题后，还是有很大的成就感，对于贪心算法求解的是 <strong>最优解的近似解</strong> 这句话也有更深刻的认识。</li>
+</ol>
+<h2 id="六、完成的cpp代码如下"><a href="#六、完成的cpp代码如下" class="headerlink" title="六、完成的cpp代码如下:"></a>六、完成的cpp代码如下:</h2><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br><span class="line">135</span><br><span class="line">136</span><br><span class="line">137</span><br><span class="line">138</span><br><span class="line">139</span><br><span class="line">140</span><br><span class="line">141</span><br><span class="line">142</span><br><span class="line">143</span><br><span class="line">144</span><br><span class="line">145</span><br><span class="line">146</span><br><span class="line">147</span><br><span class="line">148</span><br><span class="line">149</span><br><span class="line">150</span><br><span class="line">151</span><br><span class="line">152</span><br><span class="line">153</span><br><span class="line">154</span><br><span class="line">155</span><br><span class="line">156</span><br><span class="line">157</span><br><span class="line">158</span><br><span class="line">159</span><br><span class="line">160</span><br><span class="line">161</span><br><span class="line">162</span><br><span class="line">163</span><br><span class="line">164</span><br><span class="line">165</span><br><span class="line">166</span><br><span class="line">167</span><br><span class="line">168</span><br><span class="line">169</span><br><span class="line">170</span><br><span class="line">171</span><br><span class="line">172</span><br><span class="line">173</span><br><span class="line">174</span><br><span class="line">175</span><br><span class="line">176</span><br><span class="line">177</span><br><span class="line">178</span><br><span class="line">179</span><br><span class="line">180</span><br><span class="line">181</span><br><span class="line">182</span><br><span class="line">183</span><br><span class="line">184</span><br><span class="line">185</span><br><span class="line">186</span><br><span class="line">187</span><br><span class="line">188</span><br><span class="line">189</span><br><span class="line">190</span><br><span class="line">191</span><br><span class="line">192</span><br><span class="line">193</span><br><span class="line">194</span><br><span class="line">195</span><br><span class="line">196</span><br><span class="line">197</span><br><span class="line">198</span><br><span class="line">199</span><br><span class="line">200</span><br><span class="line">201</span><br><span class="line">202</span><br><span class="line">203</span><br><span class="line">204</span><br><span class="line">205</span><br><span class="line">206</span><br><span class="line">207</span><br><span class="line">208</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;iostream&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;cmath&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;cstring&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;vector&gt;</span></span></span><br><span class="line"> </span><br><span class="line">using namespace <span class="built_in">std</span>;</span><br><span class="line"> </span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> INF 10e7</span></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> min(a,b) ((a&gt;b)?b:a)</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">TSP</span>&#123;</span></span><br><span class="line">	protected:</span><br><span class="line">		<span class="type">int</span>** Arr;  <span class="comment">//距离矩阵 </span></span><br><span class="line">		<span class="type">int</span> N;       <span class="comment">//矩阵维度数 </span></span><br><span class="line">		<span class="type">int</span>** dp;   <span class="comment">//动态规划数组 </span></span><br><span class="line">		<span class="type">int</span> M;      <span class="comment">//动态规划数组的列数 </span></span><br><span class="line">		<span class="built_in">vector</span>&lt;<span class="type">int</span>&gt; path;</span><br><span class="line">		</span><br><span class="line">	public:</span><br><span class="line">		</span><br><span class="line">	TSP()&#123;</span><br><span class="line">	<span class="built_in">cout</span>&lt;&lt;<span class="string">&quot;请输入有几个城市：&quot;</span>&lt;&lt;<span class="built_in">endl</span>;</span><br><span class="line">	<span class="type">int</span> n;</span><br><span class="line">	<span class="built_in">cin</span>&gt;&gt;n;</span><br><span class="line"></span><br><span class="line">	N=n;</span><br><span class="line">	M=<span class="number">1</span>&lt;&lt;(N<span class="number">-1</span>); </span><br><span class="line">	<span class="built_in">cout</span>&lt;&lt;<span class="string">&quot;M:  &quot;</span>&lt;&lt;M&lt;&lt;<span class="built_in">endl</span>;</span><br><span class="line">	Arr=new <span class="type">int</span>* [n];  <span class="comment">//输入的距离矩阵 </span></span><br><span class="line">	dp=new <span class="type">int</span>* [n];  <span class="comment">//动态规划数组 </span></span><br><span class="line">	<span class="keyword">for</span>(<span class="type">int</span> i=<span class="number">0</span>;i&lt;n;i++)&#123;</span><br><span class="line">		(Arr[i])=new <span class="type">int</span>[n];</span><br><span class="line">		dp[i]=new <span class="type">int</span>[M]; </span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="built_in">cout</span>&lt;&lt;<span class="string">&quot;请依次输入距离矩阵的下三角元素（每一行之间使用回车分割，行内元素空格分隔）&quot;</span>&lt;&lt;<span class="built_in">endl</span>;</span><br><span class="line">	<span class="keyword">for</span>(<span class="type">int</span> a=<span class="number">0</span>;a&lt;n;a++)&#123;</span><br><span class="line">		<span class="keyword">for</span>(<span class="type">int</span> j=<span class="number">0</span>;j&lt;a;j++)&#123;</span><br><span class="line">			<span class="built_in">cin</span>&gt;&gt;(Arr[a][j]);</span><br><span class="line">			Arr[j][a]=Arr[a][j];</span><br><span class="line">		&#125;</span><br><span class="line">		Arr[a][a]=<span class="number">0</span>;</span><br><span class="line">	&#125;</span><br><span class="line">	</span><br><span class="line">	<span class="comment">//初始化动态规划数组的第一列 </span></span><br><span class="line">	<span class="keyword">for</span>(<span class="type">int</span> i=<span class="number">0</span>;i&lt;n;i++)&#123;</span><br><span class="line">		dp[i][<span class="number">0</span>]=Arr[i][<span class="number">0</span>];</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="type">void</span> <span class="title function_">play</span><span class="params">()</span>&#123;</span><br><span class="line">	<span class="keyword">for</span>(<span class="type">int</span> i=<span class="number">0</span>;i&lt;N;i++)&#123;</span><br><span class="line">		<span class="keyword">for</span>(<span class="type">int</span> j=<span class="number">0</span>;j&lt;N;j++)&#123;</span><br><span class="line">			<span class="built_in">cout</span>&lt;&lt;Arr[i][j]&lt;&lt;<span class="string">&quot; &quot;</span>;</span><br><span class="line">		&#125;</span><br><span class="line">		<span class="built_in">cout</span>&lt;&lt;<span class="built_in">endl</span>;</span><br><span class="line">	&#125;</span><br><span class="line">	</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"> </span><br><span class="line"><span class="comment">//求动态规划dp数组</span></span><br><span class="line"><span class="type">void</span> <span class="title function_">TSP_fun</span><span class="params">()</span>&#123;</span><br><span class="line">	</span><br><span class="line">    <span class="comment">//求解dp[i][j],先更新列再更新行</span></span><br><span class="line">    <span class="keyword">for</span>(<span class="type">int</span> j = <span class="number">1</span> ; j &lt; M ;j++)&#123;</span><br><span class="line">        <span class="keyword">for</span>(<span class="type">int</span> i = <span class="number">0</span> ; i &lt; N ;i++ )&#123;</span><br><span class="line">            dp[i][j] = INF;</span><br><span class="line">            <span class="comment">//如果城市集合j(或状态j)中包含城市结点i,则不符合条件退出</span></span><br><span class="line">            <span class="keyword">if</span>( ((j &gt;&gt; (i<span class="number">-1</span>)) &amp; <span class="number">1</span>) == <span class="number">1</span>)&#123;</span><br><span class="line">                <span class="keyword">continue</span>;</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">for</span>(<span class="type">int</span> k = <span class="number">1</span> ; k &lt; N ; k++)&#123;</span><br><span class="line">                <span class="keyword">if</span>( ((j &gt;&gt; (k<span class="number">-1</span>)) &amp; <span class="number">1</span>) == <span class="number">0</span>)&#123;</span><br><span class="line">                    <span class="keyword">continue</span>;</span><br><span class="line">                &#125;</span><br><span class="line">                <span class="keyword">if</span>( dp[i][j] &gt; Arr[i][k] + dp[k][j^(<span class="number">1</span>&lt;&lt;(k<span class="number">-1</span>))])&#123;</span><br><span class="line">                    dp[i][j] = Arr[i][k] + dp[k][j^(<span class="number">1</span>&lt;&lt;(k<span class="number">-1</span>))];</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"> </span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">//判断结点是否都以访问,不包括0号结点</span></span><br><span class="line"><span class="type">bool</span> <span class="title function_">isVisited</span><span class="params">(<span class="type">bool</span> visited[])</span>&#123;</span><br><span class="line">    <span class="keyword">for</span>(<span class="type">int</span> i = <span class="number">1</span> ; i&lt;N ;i++)&#123;</span><br><span class="line">        <span class="keyword">if</span>(visited[i] == <span class="literal">false</span>)&#123;</span><br><span class="line">            <span class="keyword">return</span> <span class="literal">false</span>;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> <span class="literal">true</span>;</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">//获取最优路径，保存在path中,根据动态规划公式反向找出最短路径结点</span></span><br><span class="line"><span class="type">void</span> <span class="title function_">getPath</span><span class="params">()</span>&#123;</span><br><span class="line">    <span class="comment">//标记访问数组</span></span><br><span class="line">    <span class="type">bool</span> visited[N] = &#123;<span class="literal">false</span>&#125;;</span><br><span class="line">    <span class="comment">//前驱节点编号</span></span><br><span class="line">    <span class="type">int</span> pioneer = <span class="number">0</span> ,min = INF, S = M - <span class="number">1</span>,temp ;</span><br><span class="line">    <span class="comment">//把起点结点编号加入容器</span></span><br><span class="line">    path.push_back(<span class="number">0</span>);</span><br><span class="line"> </span><br><span class="line">    <span class="keyword">while</span>(!isVisited(visited))&#123;</span><br><span class="line">        <span class="keyword">for</span>(<span class="type">int</span> i=<span class="number">1</span>; i&lt;N;i++)&#123;</span><br><span class="line">            <span class="keyword">if</span>(visited[i] == <span class="literal">false</span> &amp;&amp; (S&amp;(<span class="number">1</span>&lt;&lt;(i<span class="number">-1</span>))) != <span class="number">0</span>)&#123;</span><br><span class="line">                <span class="keyword">if</span>(min &gt; Arr[i][pioneer] + dp[i][(S^(<span class="number">1</span>&lt;&lt;(i<span class="number">-1</span>)))])&#123;</span><br><span class="line">                    min = Arr[i][pioneer] + dp[i][(S^(<span class="number">1</span>&lt;&lt;(i<span class="number">-1</span>)))] ;</span><br><span class="line">                    temp = i;</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        pioneer = temp;</span><br><span class="line">        path.push_back(pioneer);</span><br><span class="line">        visited[pioneer] = <span class="literal">true</span>;</span><br><span class="line">        S = S ^ (<span class="number">1</span>&lt;&lt;(pioneer - <span class="number">1</span>));</span><br><span class="line">        min = INF;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">//输出路径</span></span><br><span class="line"><span class="type">void</span> <span class="title function_">printPath</span><span class="params">()</span>&#123;</span><br><span class="line">	<span class="built_in">cout</span>&lt;&lt;<span class="string">&quot;最小值为：&quot;</span>&lt;&lt;dp[<span class="number">0</span>][M<span class="number">-1</span>]&lt;&lt;<span class="built_in">endl</span>;</span><br><span class="line">    <span class="built_in">cout</span>&lt;&lt;<span class="string">&quot;最小路径为：&quot;</span>;</span><br><span class="line">    <span class="built_in">vector</span>&lt;<span class="type">int</span>&gt;::iterator  it = path.begin();</span><br><span class="line">    <span class="built_in">string</span> arr[<span class="number">7</span>]=&#123;<span class="string">&quot;广州&quot;</span>,<span class="string">&quot;佛山&quot;</span>,<span class="string">&quot;深圳&quot;</span>,<span class="string">&quot;珠海&quot;</span>,<span class="string">&quot;韶关&quot;</span>,<span class="string">&quot;汕头&quot;</span>,<span class="string">&quot;湛江&quot;</span>&#125;;</span><br><span class="line">    <span class="keyword">for</span>(it ; it != path.end();it++)&#123;</span><br><span class="line">        <span class="built_in">cout</span>&lt;&lt;arr[*it]&lt;&lt;<span class="string">&quot;---&gt;&quot;</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">//单独输出起点编号</span></span><br><span class="line">    <span class="built_in">cout</span>&lt;&lt;<span class="string">&quot;广州&quot;</span>&lt;&lt;<span class="built_in">endl</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Greedy</span>:</span>public TSP&#123;</span><br><span class="line">	private:</span><br><span class="line">		<span class="type">int</span> i,j,k,l;</span><br><span class="line">		<span class="type">int</span>* S=new <span class="type">int</span>[N];   <span class="comment">//用于存储已访问过的城市</span></span><br><span class="line">		<span class="type">int</span> sum=<span class="number">0</span>;           <span class="comment">//用于记算已访问过的城市的最小路径长度</span></span><br><span class="line">		<span class="type">int</span> visited;         <span class="comment">//被访问的标志，若被访问过则为1，从未被访问过则为0</span></span><br><span class="line">		</span><br><span class="line">		<span class="type">int</span> temp;</span><br><span class="line">	public:</span><br><span class="line">	Greedy():TSP()&#123;</span><br><span class="line">	      <span class="comment">//i是至今已访问过的城市</span></span><br><span class="line">	&#125;</span><br><span class="line">		</span><br><span class="line">		</span><br><span class="line">	<span class="type">void</span> <span class="title function_">Greedy_fun</span><span class="params">()</span>&#123; </span><br><span class="line">    i = <span class="number">1</span>;<span class="comment">//i是至今已访问过的城市</span></span><br><span class="line">    S[<span class="number">0</span>] = <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">do</span>&#123;</span><br><span class="line">        k = <span class="number">1</span>;</span><br><span class="line">		Dtemp = INF;</span><br><span class="line">        <span class="keyword">do</span>&#123;</span><br><span class="line">            l = <span class="number">0</span>;</span><br><span class="line">			visited = <span class="number">0</span>;</span><br><span class="line">            <span class="keyword">do</span>&#123;</span><br><span class="line">                <span class="keyword">if</span>(S[l] == k)&#123;<span class="comment">//判断该城市是否已被访问过，若被访问过，</span></span><br><span class="line">                    visited= <span class="number">1</span>;<span class="comment">//则flag为1</span></span><br><span class="line">                    <span class="keyword">break</span>;<span class="comment">//跳出循环，不参与距离的比较</span></span><br><span class="line">                &#125;<span class="keyword">else</span></span><br><span class="line">                    l++;</span><br><span class="line">            &#125;<span class="keyword">while</span>(l &lt; i);</span><br><span class="line">            <span class="keyword">if</span>(visited == <span class="number">0</span>&amp;&amp;Arr[k][S[i - <span class="number">1</span>]] &lt; Dtemp)&#123;<span class="comment">/*D[k][S[i - 1]]表示当前未被访问的城市k与上一个已访问过的城市i-1之间的距离*/</span></span><br><span class="line">                j = k;<span class="comment">//j用于存储已访问过的城市k</span></span><br><span class="line">                Dtemp = Arr[k][S[i - <span class="number">1</span>]];<span class="comment">//Dtemp用于暂时存储当前最小路径的值</span></span><br><span class="line">            &#125;</span><br><span class="line">            k++;</span><br><span class="line">        &#125;<span class="keyword">while</span>(k &lt; N);</span><br><span class="line">        S[i] = j;<span class="comment">//将已访问过的城市j存入到S[i]中</span></span><br><span class="line">        i++;</span><br><span class="line">        sum += Dtemp;<span class="comment">//求出各城市之间的最短距离，注意：在结束循环时，该旅行商尚未回到原出发的城市</span></span><br><span class="line">    &#125;<span class="keyword">while</span>(i &lt; N);</span><br><span class="line">    sum += Arr[<span class="number">0</span>][j];<span class="comment">//D[0][j]为旅行商所在的最后一个城市与原出发的城市之间的距离</span></span><br><span class="line">    <span class="built_in">string</span> arr[<span class="number">7</span>]=&#123;<span class="string">&quot;广州&quot;</span>,<span class="string">&quot;佛山&quot;</span>,<span class="string">&quot;深圳&quot;</span>,<span class="string">&quot;珠海&quot;</span>,<span class="string">&quot;韶关&quot;</span>,<span class="string">&quot;汕头&quot;</span>,<span class="string">&quot;湛江&quot;</span>&#125;;</span><br><span class="line">    <span class="keyword">for</span>(j = <span class="number">0</span>; j &lt; N; j++)&#123; <span class="comment">//输出经过的城市的路径</span></span><br><span class="line">        <span class="built_in">cout</span>&lt;&lt;arr[j]&lt;&lt;<span class="string">&quot; --&gt; &quot;</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="built_in">cout</span>&lt;&lt;<span class="string">&quot;广州&quot;</span>&lt;&lt;<span class="built_in">endl</span>;</span><br><span class="line">    <span class="built_in">cout</span>&lt;&lt;<span class="string">&quot;\n总距离为：&quot;</span>&lt;&lt;sum;<span class="comment">//求出最短路径的值</span></span><br><span class="line">	&#125;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="type">int</span> <span class="title function_">main</span><span class="params">()</span>&#123;</span><br><span class="line">	TSP tsp;</span><br><span class="line">	tsp.TSP_fun();</span><br><span class="line">	tsp.getPath();</span><br><span class="line">	tsp.printPath();</span><br><span class="line">	</span><br><span class="line">	Greedy g;</span><br><span class="line">	g.Greedy_fun();</span><br><span class="line">	</span><br><span class="line">	<span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+</article>
+    
+    
+</div>
+<div id="post-next-prev" class="row">
+    <div class="col-lg-12">
+        <!-- title -->
+        <h5 class="trm-title-with-divider">
+            Other Articles
+            <span data-number="02"></span>
+        </h5>
+    </div>
+    
+    
+</div>
+
+    
+
+
+
+                    <div class="trm-divider footer-divider"></div>
+
+                    <!-- footer -->
+                    <footer class="trm-scroll-animation" data-scroll data-scroll-offset="50">
+
+    
+
+    
+
+    
+        <div class="trm-footer-item">
+            <span>
+                Powered by <a href="https://hexo.io" target="_blank" rel="noopener">Hexo</a> v6.3.0
+            </span>
+            <span class="footer-separator" data-separator=" | "></span>
+            <span> 
+                Theme - 
+                <a rel="noopener" href='https://github.com/MaLuns/hexo-theme-async' target='_blank'>Async</a>
+                v2.0.3
+            </span>
+        </div>
+      
+
+     
+
+     
+</footer>
+ 
+                    <!-- footer end -->
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+            <!-- body end -->
+
+            <div class="trm-fixed-container" data-scroll data-scroll-sticky data-scroll-target=".locomotive-scroll__sticky-target" data-scroll-offset="-10">
+    
+        <div class="trm-fixed-btn" data-title="Read Mode" onclick="asyncFun.switchReadMode()">
+            <i class="iconfont fas fa-book-reader"></i>
+        </div>
+    
+    
+    <div id="trm-back-top" class="trm-fixed-btn" data-title="Back To Top">
+        <i class="iconfont fas fa-arrow-up"></i>
+    </div>
+</div>
+          </div>
+        </div>
+      </div>
+      <!-- scroll container end -->
+
+  </div>
+  <!-- app wrapper end -->
+
+  
+  <!-- Plugin -->
+
+
+
+
+    
+    
+<script src="https://unpkg.com/locomotive-scroll@4.1.4/dist/locomotive-scroll.min.js"></script>
+
+    
+<script src="https://unpkg.com/@fancyapps/ui@4.0/dist/fancybox.umd.js"></script>
+
+    
+
+    
+
+    
+
+    <!-- 数学公式 -->
+    
+
+    <!-- 评论插件 -->
+    
+        
+
+        
+    
+
+
+
+<!-- CDN -->
+
+
+    
+
+    
+
+    
+
+
+
+
+    <!-- Service Worker -->
+    
+    <!-- baidu push -->
+    
+
+
+<script id="async-script" src="/js/main.js?v=2.0.3"></script>
+
+</body>
+
+</html>
