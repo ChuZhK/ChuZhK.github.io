@@ -1,0 +1,659 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+<meta name="x5-fullscreen" content="true">
+<meta name="full-screen" content="yes">
+<meta name="theme-color" content="#317EFB" />
+<meta content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=0" name="viewport">
+<meta name="description" content="QQ音乐播放器一、项目概述基本内容 : 音乐播放器基本功能、账号登录注册、账号歌单同步、歌词显示、音频频谱显示、主题切换、歌曲导入   二、业务需求和基本功能   场景分类 需求场景 对应功能    听歌前 能够获取音乐文件进行播放 主界面点击相应按钮开始导入歌曲文件   更换界面，想让用户界面更好看 主题更换功能，可以更换不同播放背景，同时相关颜色发生改变     用户想要保存当前歌单 登录账号">
+<meta property="og:type" content="article">
+<meta property="og:title" content="QQ音乐（Java项目）">
+<meta property="og:url" content="http://example.com/2023/03/18/QQMusic/index.html">
+<meta property="og:site_name" content="储震坤的个人博客">
+<meta property="og:description" content="QQ音乐播放器一、项目概述基本内容 : 音乐播放器基本功能、账号登录注册、账号歌单同步、歌词显示、音频频谱显示、主题切换、歌曲导入   二、业务需求和基本功能   场景分类 需求场景 对应功能    听歌前 能够获取音乐文件进行播放 主界面点击相应按钮开始导入歌曲文件   更换界面，想让用户界面更好看 主题更换功能，可以更换不同播放背景，同时相关颜色发生改变     用户想要保存当前歌单 登录账号">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="http://example.com/img/404.jpg">
+<meta property="og:image" content="http://example.com/img/404.jpg">
+<meta property="og:image" content="http://example.com/img/404.jpg">
+<meta property="og:image" content="http://example.com/img/404.jpg">
+<meta property="og:image" content="http://example.com/img/404.jpg">
+<meta property="og:image" content="http://example.com/img/404.jpg">
+<meta property="article:published_time" content="2023-03-18T06:26:43.000Z">
+<meta property="article:modified_time" content="2023-03-18T06:49:10.192Z">
+<meta property="article:author" content="Zhenkun Chu">
+<meta property="article:tag" content="Java">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://example.com/img/404.jpg">
+
+
+<title >QQ音乐（Java项目）</title>
+
+<!-- Favicon -->
+
+    <link href='/img/favicon.svg?v=2.0.3' rel='icon' type='image/png' sizes='16x16' ></link>
+
+
+    <link href='/img/favicon.svg?v=2.0.3' rel='icon' type='image/png' sizes='32x32' ></link>
+
+
+
+
+<!-- Plugin -->
+
+
+
+
+    
+<link rel="stylesheet" href="/css/plugins/bootstrap.row.css">
+
+    
+<link rel="stylesheet" href="https://unpkg.com/locomotive-scroll@4.1.4/dist/locomotive-scroll.min.css">
+
+    
+<link rel="stylesheet" href="https://unpkg.com/@fancyapps/ui@4.0/dist/fancybox.css">
+
+    
+    
+
+
+
+
+<!-- Icon -->
+
+    
+<link rel="stylesheet" href="/css/plugins/font-awesome.min.css">
+
+
+
+
+<!-- Variable -->
+<script>window.ASYNC_CONFIG = {"hostname":"example.com","author":"Zhenkun Chu","root":"/","typed_text":null,"theme_version":"2.0.3","theme":{"switch":true,"default":"style-light"},"favicon":{"logo":"/img/favicon.svg","icon16":"/img/favicon.svg","icon32":"/img/favicon.svg","appleTouchIcon":null,"webmanifest":null,"visibilitychange":false,"hidden":"/failure.ico","showText":"(/≧▽≦/)Hey! Good again!","hideText":"(●—●)Oh, crash!"},"i18n":{"placeholder":"Searching...","empty":"We didn't find any results for the search: ${query}.","hits":"${hits} results found","hits_time":"${hits} results found in ${time} ms","author":"Post author: ","copyright_link":"Post link: ","copyright_license_title":"Copyright Notice: ","copyright_license_content":"All articles in this blog are licensed under undefined unless otherwise stated.","copy_success":"Copied","copy_failure":"Copy failed","open_read_mode":"Enter reading mode","exit_read_mode":"Exit reading mode","notice_outdate_message":"It has been undefined days since the last update, the content of the article may be outdated.","just":"Just","min":"minutes ago","hour":"hours ago","day":"days ago","month":"months ago"},"swup":false,"plugin":{"flickr_justified_gallery":"https://unpkg.com/flickr-justified-gallery@latest/dist/fjGallery.min.js"},"icons":{"sun":"far fa-sun","moon":"far fa-moon","play":"fas fa-play","email":"far fa-envelope","next":"fas fa-arrow-right","calendar":"far fa-calendar-alt","clock":"far fa-clock","user":"far fa-user","back_top":"fas fa-arrow-up","close":"fas fa-times","search":"fas fa-search","reward":"fas fa-hand-holding-usd","user_tag":"fas fa-user-alt","toc_tag":"fas fa-th-list","read":"fas fa-book-reader","arrows":"fas fa-arrows-alt-h","double_arrows":"fas fa-angle-double-down","copy":"fas fa-copy"},"icontype":"font","highlight":{"plugin":"highlighjs","theme":true,"copy":true,"lang":true,"title":"default","height_limit":false}};</script>
+<script id="async-page-config">window.PAGE_CONFIG = {"isPost":true,"isHome":false,"postUpdate":"2023-03-18 14:49:10"};</script>
+
+<!-- Theme mode css -->
+<link data-swup-theme rel="stylesheet" href="/css/index.css?v=2.0.3" id="trm-switch-style">
+<script>
+    let defaultMode = ASYNC_CONFIG.theme.default !=='auto' ?  ASYNC_CONFIG.theme.default : (window.matchMedia("(prefers-color-scheme: light)").matches ? 'style-light' : 'style-dark')
+    let catchMode = localStorage.getItem('theme-mode') || defaultMode;
+    let type = catchMode === 'style-dark' ? 'add' : 'remove';
+    document.documentElement.classList[type]('dark')
+</script>
+
+<!-- CDN -->
+
+
+    
+    
+
+
+
+<!-- Site Analytics -->
+ 
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+<body>
+
+  <!-- app wrapper -->
+  <div class="trm-app-frame">
+
+    <!-- page preloader -->
+    <div class="trm-preloader">
+    <div class="trm-holder">
+        <div class="preloader">
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+        </div>
+    </div>
+</div>
+    <!-- page preloader end -->
+
+    <!-- change mode preloader -->
+    <div class="trm-mode-swich-animation-frame">
+    <div class="trm-mode-swich-animation">
+        <i class="i-sun"><i class="iconfont far fa-sun"></i></i>
+        <div class="trm-horizon"></div>
+        <i class="i-moon"><i class="iconfont far fa-moon"></i></i>
+    </div>
+</div>
+    <!-- change mode preloader end -->
+
+      <!-- scroll container -->
+      <div id="trm-dynamic-content" class="trm-swup-animation">
+        <div id="trm-scroll-container" class="trm-scroll-container" data-scroll-container style="opacity: 0">
+          <div data-scroll-section id="content" class="trm-scroll-section">
+
+            <div class="locomotive-scroll__sticky-target" style="position: absolute; top: 0; left: 0; right: 0; bottom: 0; pointer-events: none;"></div>
+
+            <!-- top bar -->
+            <header class="trm-top-bar" data-scroll data-scroll-sticky data-scroll-target=".locomotive-scroll__sticky-target" data-scroll-offset="-10">
+	<div class="container">
+		<div class="trm-left-side">
+			<!-- logo -->
+<a href="/" class="trm-logo-frame trm-anima-link">
+    
+        <img alt="logo" src="/img/favicon.svg">
+    
+    
+        <div class="trm-logo-text">
+            Chu<span>ZhK</span>
+        </div>
+    
+</a>
+<!-- logo end -->
+		</div>
+		<div class="trm-right-side">
+			<!-- menu -->
+<div class="trm-menu">
+    <nav>
+        <ul>
+            
+            <li class="menu-item-has-children ">
+                <a  href="/" target="">
+                    Home
+                </a>
+                
+            </li>
+            
+            <li class="menu-item-has-children ">
+                <a  href="/archives/" target="">
+                    Archives
+                </a>
+                
+            </li>
+            
+        </ul>
+    </nav>
+</div>
+<!-- menu end -->
+			
+    <!-- mode switcher place -->
+    <div class="trm-mode-switcher-place">
+        <div class="trm-mode-switcher">
+            <i class="iconfont far fa-sun"></i>
+            <input class="tgl tgl-light" id="trm-swich" type="checkbox">
+            <label class="trm-swich" for="trm-swich"></label>
+            <i class="iconfont far fa-moon"></i>
+        </div>
+    </div>
+    <!-- mode switcher place end -->
+
+			
+		</div>
+		<div class="trm-menu-btn">
+			<span></span>
+		</div>
+	</div>
+</header>
+            <!-- top bar end -->
+
+            <!-- body -->
+            
+<div class="trm-content-start">
+    <!-- banner -->
+    <div class="trm-banner" data-scroll data-scroll-direction="vertical">
+    
+    <!-- banner cover -->
+    <img style="object-position:top;object-fit:cover;" alt="banner" class="trm-banner-cover" data-scroll data-scroll-direction="vertical" data-scroll-speed="-3" src="/img/banner.png">
+    <!-- banner cover end -->
+    
+
+    <!-- banner content -->
+    <div class="trm-banner-content trm-overlay">
+        <div class="container" data-scroll data-scroll-direction="vertical" data-scroll-speed="0">
+            <div class="row">
+                
+                <div class="col-lg-4"></div>
+                
+                <div class="col-lg-8">
+
+                    <!-- banner title -->
+                    <div class="trm-banner-text ">
+                        <div class="trm-label trm-mb-20">
+                            NEWS LETTER
+                        </div>
+                        <h1 class="trm-mb-30 trm-hsmb-font">
+                            QQ音乐（Java项目）
+                        </h1>
+
+                        
+                            <ul class="trm-breadcrumbs trm-label">
+                                <li>
+                                    <a href="/" class="trm-anima-link">Home</a>
+                                </li>
+                                <li>
+                                    <span>
+                                        2023
+                                    </span
+                                ></li>
+                            </ul>
+                        
+                    </div>
+                    <!-- banner title end -->
+
+                    <!-- scroll hint -->
+                    <a href="#about-triger" data-scroll-to="#about-triger" data-scroll-offset="-130" class="trm-scroll-hint-frame">
+                        <div class="trm-scroll-hint"></div>
+                        <span class="trm-label">Scroll down</span>
+                    </a>
+                    <!-- scroll hint end -->
+
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- banner content end -->
+</div>
+    <!-- banner end -->
+    <div class="container">
+        <div class="row">
+            
+                <div id="page-sidebar" class="col-lg-4 hidden-sm">
+                    <!-- main card -->
+                    
+
+<div class="trm-main-card-frame trm-sidebar">
+    <div class="trm-main-card" data-scroll data-scroll-repeat data-scroll-sticky data-scroll-target=".locomotive-scroll__sticky-target" data-scroll-offset="60"> 
+    
+        <!-- card header -->
+<div class="trm-mc-header">
+    <div class="trm-avatar-frame trm-mb-20">
+        <img alt="Avatar" class="trm-avatar" src="/img/avatar.jpg">
+    </div>
+    <h5 class="trm-name trm-mb-15">
+        Chu ZhK
+    </h5>
+    
+</div>
+<!-- card header end -->
+        <!-- sidebar social -->
+
+<div class="trm-divider trm-mb-40 trm-mt-40"></div>
+<div class="trm-social">
+    
+        <a href="https://github.com/ChuZhK" title="Github" rel="nofollow" target="_blank">
+            <i class="iconfont fab fa-github"></i>
+        </a>
+    
+        <a href="/1101405744@qq.com" title="QQ" rel="nofollow" target="_blank">
+            <i class="iconfont fab fa-qq"></i>
+        </a>
+    
+        <a href="https://space.bilibili.com/660718431?spm_id_from=333.1007.0.0" title="bilibili" rel="nofollow" target="_blank">
+            <i class="iconfont fab fa-bimobject"></i>
+        </a>
+    
+</div>
+
+<!-- sidebar social end -->
+        <!-- info -->
+<div class="trm-divider trm-mb-40 trm-mt-40"></div>
+<ul class="trm-table trm-mb-20">
+    
+        <li>
+            <div class="trm-label">
+                School:
+            </div>
+            <div class="trm-label trm-label-light">
+                SYSU
+            </div>
+        </li>
+    
+        <li>
+            <div class="trm-label">
+                Residence:
+            </div>
+            <div class="trm-label trm-label-light">
+                ZhuHai
+            </div>
+        </li>
+    
+</ul>
+<!-- info end -->
+
+        
+    <div class="trm-divider trm-mb-40 trm-mt-40"></div>
+    <!-- action button -->
+    <div class="text-center">
+        <a href="mailto:1101405744@qq.com" class="trm-btn">
+            Contact Me
+            <i class="iconfont far fa-envelope"></i>
+        </a>
+    </div>
+    <!-- action button end -->
+
+    
+    </div>
+</div>
+                    <!-- main card end -->
+                </div>
+            
+            <div id="page-content" class="col-lg-8">
+                <div class="trm-content" id="trm-content">
+                    <div data-scroll data-scroll-repeat data-scroll-offset="500" id="about-triger"></div>
+
+                    <div id="post-info" class="row hidden-sm">
+    <div class="col-sm-4">
+        <div class="trm-card trm-label trm-label-light text-center">
+            <i class="iconfont far fa-calendar-alt trm-icon"></i><br>
+            03/18
+        </div>
+    </div>
+    <div class="col-sm-4">
+        <div class="trm-card trm-label trm-label-light text-center">
+            <i class="iconfont far fa-clock trm-icon"></i><br>
+            14:26
+        </div>
+    </div>
+    <div class="col-sm-4">
+        <div id="post-author" class="trm-card trm-label trm-label-light text-center">
+            <i class="iconfont far fa-user trm-icon"></i><br>
+            Zhenkun Chu
+        </div>
+    </div>
+</div>
+<div class="trm-card ">
+    <article id="article-container" class="trm-publication">
+    <h1 id="QQ音乐播放器"><a href="#QQ音乐播放器" class="headerlink" title="QQ音乐播放器"></a>QQ音乐播放器</h1><h2 id="一、项目概述"><a href="#一、项目概述" class="headerlink" title="一、项目概述"></a>一、项目概述</h2><p><strong>基本内容</strong> : 音乐播放器基本功能、账号登录注册、账号歌单同步、歌词显示、音频频谱显示、主题切换、歌曲导入</p>
+<!-- __主要参加人员__： 储震坤 
+__组长__ ： 储震坤
+__业绩权重说明__ ： 1 
+__工作任务的分解和人员分工__ ：本项目由单人完成 -->
+
+<h2 id="二、业务需求和基本功能"><a href="#二、业务需求和基本功能" class="headerlink" title="二、业务需求和基本功能"></a>二、业务需求和基本功能</h2><table>
+<thead>
+<tr>
+<th>场景分类</th>
+<th>需求场景</th>
+<th>对应功能</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>听歌前</td>
+<td>能够获取音乐文件进行播放</td>
+<td>主界面点击相应按钮开始导入歌曲文件</td>
+</tr>
+<tr>
+<td>更换界面，想让用户界面更好看</td>
+<td>主题更换功能，可以更换不同播放背景，同时相关颜色发生改变</td>
+<td></td>
+</tr>
+<tr>
+<td></td>
+<td>用户想要保存当前歌单</td>
+<td>登录账号后每个账号独立同步歌单（没有账号时可以先注册）</td>
+</tr>
+<tr>
+<td>听歌中</td>
+<td>暂停歌曲播放；不喜欢当前歌曲想要切换别的歌曲</td>
+<td>对音乐播放的暂停功能，切换上一曲和下一曲的功能</td>
+</tr>
+<tr>
+<td>用户希望看到歌曲的相关信息</td>
+<td>播放时显示歌词，音频频谱以及播放时长</td>
+<td></td>
+</tr>
+<tr>
+<td>用户想要跳转到歌曲高潮部分</td>
+<td>拖动歌曲进度条可以实现歌曲播放进度的调整</td>
+<td></td>
+</tr>
+<tr>
+<td>调整适合的音量大小</td>
+<td>拖动音量滑块可以调整音量大小</td>
+<td></td>
+</tr>
+</tbody></table>
+<h2 id="三、系统设计与实现"><a href="#三、系统设计与实现" class="headerlink" title="三、系统设计与实现"></a>三、系统设计与实现</h2><h3 id="1-计算机体系设计"><a href="#1-计算机体系设计" class="headerlink" title="(1) 计算机体系设计"></a>(1) 计算机体系设计</h3><p>采用IDEA开发工具、 Scene Builder、MySQL、Navicat,在jdk-18版本下进行项目开发。<br>主要涉及技术：<br><strong>Javafx、数据库编程、多线程编程、文件处理、泛型编程与lambda表达式。</strong></p>
+<h3 id="2-功能详细设计与数据库字典"><a href="#2-功能详细设计与数据库字典" class="headerlink" title="(2) 功能详细设计与数据库字典"></a>(2) 功能详细设计与数据库字典</h3><ol>
+<li><p>   QQ播放器核心功能：音乐播放<br>点击播放按钮后开始在文件链表中播放歌曲文件，再次点击暂停播放。点击上一曲或下一曲后在暂停当前歌曲播放，清空当前歌曲，选择上一首或下一首播放。同时，可以通过拖动播放进度条来调整音乐播放进度。</p>
+</li>
+<li><p>音乐文件导入与删除<br>使用文件选择器导入音乐文件，对文件名进行处理后显示在歌曲列表的界面。<br>如果进行相关操作时已经登录账号，在导入文件时使用迭代器将每个文件的本地路径名添加到数据库表中，删除文件时，从数据库中删除数据库中登录账号对应的该文件的路径名</p>
+</li>
+<li><p>账号登录与注册<br>注册账号时，不允许账号和密码为空，同时限制最长账号为20位字符，在数据库中查询 <code>account</code> 表，返回账号对应的密码信息（如果该账号在数据库中存在的话，不存在就提示用户注册账号），比对返回信息和输入的密码<br>如果比对成功就显示登陆成功，否则提示登陆失败。<br>登录成功后，查询该账号对应的歌曲信息，如果数据库中存有相关信息，就按照返回的歌曲路径，从本地导入歌曲文件。</p>
+</li>
+<li><p>主题切换功能<br>在主界面点击主题按钮，弹出上下文菜单，进行主题选择。选择主题后切换相应背景图片和颜色。</p>
+</li>
+<li><p>数据库表设计如下：</p>
+</li>
+</ol>
+<p>账号密码表（num 为主键，num和password非空）</p>
+<table>
+<thead>
+<tr>
+<th>num</th>
+<th>password</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>NULL</td>
+<td>NULL</td>
+</tr>
+</tbody></table>
+<p>账号歌曲表(num 和 music非空)</p>
+<table>
+<thead>
+<tr>
+<th>num</th>
+<th>music</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>NULL</td>
+<td>NULL</td>
+</tr>
+</tbody></table>
+<h3 id="3-编码实现"><a href="#3-编码实现" class="headerlink" title="(3) 编码实现"></a>(3) 编码实现</h3><p>1、播放列表的实现</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br></pre></td><td class="code"><pre><span class="line">listView.getSelectionModel().selectedItemProperty().addListener((object,oldFile,newFile) -&gt;&#123;</span><br><span class="line">    <span class="comment">//选择歌曲播放的时候如果有歌曲正在播放那就直接将之前的对象销毁重新创建！！！</span></span><br><span class="line">    <span class="keyword">if</span> (player != <span class="literal">null</span>) &#123;</span><br><span class="line">        player.stop();</span><br><span class="line">        lrcView.setLrcDoc(<span class="literal">null</span>); <span class="comment">//将歌词组件内容进行清空</span></span><br><span class="line">        lrcView.currentTimeProperty().unbind();  <span class="comment">//解除绑定</span></span><br><span class="line">        lrcView.setCurrentTime(Duration.ZERO);</span><br><span class="line">        player.setAudioSpectrumListener(<span class="literal">null</span>);</span><br><span class="line">        progressBar.durationProperty().unbind();</span><br><span class="line">        progressBar.setCurrentTime(Duration.ZERO);</span><br><span class="line">        player.currentTimeProperty().removeListener((ob1, ov1, nv1) -&gt; &#123;</span><br><span class="line">            progressBar.setCurrentTime(nv1);</span><br><span class="line">        &#125;);</span><br><span class="line">        <span class="comment">//关闭时直接给频谱组件传入一个数组即可（频谱的高度由数字决定）</span></span><br><span class="line">        <span class="type">float</span>[] empty=<span class="keyword">new</span> <span class="title class_">float</span>[<span class="number">128</span>];</span><br><span class="line">        Arrays.fill(empty,-<span class="number">60.0f</span>);</span><br><span class="line">        audioSpectrum.setMagnitudes(empty);</span><br><span class="line">        timeLabel.setText(<span class="string">&quot;00:00 / 00:00&quot;</span>);</span><br><span class="line">        playBtn.setSelected(<span class="literal">false</span>);</span><br><span class="line">        player.setOnEndOfMedia(<span class="literal">null</span>);</span><br><span class="line">        player.dispose();</span><br><span class="line">        player = <span class="literal">null</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">if</span>(newFile !=<span class="literal">null</span>) &#123;  <span class="comment">//当选中的文件不为空时，创建MediaPlayer对象进行播放</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">        player = <span class="keyword">new</span> <span class="title class_">MediaPlayer</span>(<span class="keyword">new</span> <span class="title class_">Media</span>(newFile.toURI().toString()));</span><br><span class="line">        player.setVolume(soundSlider.getValue() / <span class="number">100</span>); <span class="comment">//通过音量滑块设置音量的大小</span></span><br><span class="line"></span><br><span class="line">        <span class="comment">//设置歌词</span></span><br><span class="line">        <span class="comment">//通过歌名提取出歌词文件的名称</span></span><br><span class="line">        <span class="type">String</span> <span class="variable">lrcPath</span> <span class="operator">=</span> newFile.getAbsolutePath().replaceAll(<span class="string">&quot;mp3$&quot;</span>, <span class="string">&quot;lrc&quot;</span>);</span><br><span class="line">        <span class="type">File</span> <span class="variable">lrcFile</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">File</span>(lrcPath);</span><br><span class="line">        <span class="comment">//歌词文件存在时才能进行操作</span></span><br><span class="line">        <span class="keyword">if</span> (lrcFile.exists()) &#123;</span><br><span class="line">            <span class="type">byte</span>[] bytes = <span class="keyword">new</span> <span class="title class_">byte</span>[<span class="number">0</span>];</span><br><span class="line">            <span class="keyword">try</span> &#123;</span><br><span class="line">                bytes = Files.readAllBytes(lrcFile.toPath());</span><br><span class="line">                <span class="comment">//使用网上的编码方式对歌词进行解析</span></span><br><span class="line">                lrcView.setLrcDoc(LrcDoc.parseLrcDoc(<span class="keyword">new</span> <span class="title class_">String</span>(bytes, EncodingDetect.detect(bytes))));</span><br><span class="line">            &#125; <span class="keyword">catch</span> (IOException e) &#123;</span><br><span class="line">                e.printStackTrace();</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br></pre></td></tr></table></figure>
+
+<ol start="2">
+<li><p>绑定歌词进度</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//设置歌词进度</span></span><br><span class="line">lrcView.currentTimeProperty().bind(player.currentTimeProperty());</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>绑定进度条和歌曲播放进度</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//设置进度条的总时长</span></span><br><span class="line"> progressBar.durationProperty().bind(player.getMedia().durationProperty());</span><br><span class="line"> <span class="comment">//播放器的进度修改监听器</span></span><br><span class="line"> player.currentTimeProperty().addListener((ob1, ov1, nv1) -&gt; &#123;</span><br><span class="line"> progressBar.setCurrentTime(nv1);</span><br><span class="line"> <span class="comment">//随着播放时间的改变修改时间的显示</span></span><br><span class="line"> <span class="type">String</span> <span class="variable">currentTime</span> <span class="operator">=</span> sdf.format(nv1.toMillis());</span><br><span class="line"> String bufferTime=<span class="literal">null</span>;</span><br><span class="line"> <span class="keyword">if</span>(player.getBufferProgressTime() != <span class="literal">null</span>)&#123;</span><br><span class="line">     bufferTime = sdf.format(player.getBufferProgressTime().toMillis());</span><br><span class="line"> &#125;</span><br><span class="line"></span><br><span class="line"> <span class="keyword">if</span>(bufferTime==<span class="literal">null</span>)&#123;</span><br><span class="line">     bufferTime=<span class="string">&quot;00 : 00&quot;</span>;</span><br><span class="line"> &#125;</span><br><span class="line"> timeLabel.setText(currentTime+<span class="string">&quot;/&quot;</span>+bufferTime);</span><br><span class="line"> &#125;);</span><br><span class="line"></span><br><span class="line"> playBtn.setSelected(<span class="literal">true</span>); <span class="comment">//切换歌曲时该变播放键选中状态</span></span><br><span class="line"> <span class="comment">//如果播放完当前歌曲, 自动播放下一首</span></span><br><span class="line"> player.setOnEndOfMedia(()-&gt;&#123;</span><br><span class="line"> <span class="type">int</span> size=listView.getItems().size();</span><br><span class="line"> <span class="keyword">if</span>(size&lt;<span class="number">2</span>)&#123;</span><br><span class="line">     <span class="keyword">return</span>;</span><br><span class="line"> &#125;</span><br><span class="line"> <span class="type">int</span> index=listView.getSelectionModel().getSelectedIndex();</span><br><span class="line"> <span class="comment">//当前歌曲是最后一首时，跳转到第一首</span></span><br><span class="line"> index=(index == size-<span class="number">1</span>)? <span class="number">0</span>:index+<span class="number">1</span>;</span><br><span class="line"> listView.getSelectionModel().select(index);</span><br><span class="line"> &#125;);</span><br><span class="line"> player.play();</span><br><span class="line">  </span><br></pre></td></tr></table></figure></li>
+</ol>
+<p>主题切换按钮的绑定</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title function_">initSkinPoppup</span><span class="params">()</span> &#123;</span><br><span class="line">    <span class="comment">//使用上下文菜单，实现在点击别的区域自动消失</span></span><br><span class="line">    <span class="comment">//使用空白符，避免在传入的值为0的时候，直接不显示菜单</span></span><br><span class="line">    skinPopup=<span class="keyword">new</span> <span class="title class_">ContextMenu</span>(<span class="keyword">new</span> <span class="title class_">SeparatorMenuItem</span>());</span><br><span class="line">    Parent skinRoot= <span class="literal">null</span>;</span><br><span class="line">    <span class="keyword">try</span> &#123;</span><br><span class="line">        FXMLLoader fxmlloader=<span class="keyword">new</span> <span class="title class_">FXMLLoader</span>(Objects.requireNonNull(getClass().getResource(<span class="string">&quot;/fxml/skin2.fxml&quot;</span>)));</span><br><span class="line">        skinRoot=fxmlloader.load();</span><br><span class="line">        ObservableMap&lt;String,Object&gt; namespace= fxmlloader.getNamespace();</span><br><span class="line">        ToggleGroup skinGroup=(ToggleGroup) namespace.get(<span class="string">&quot;skinGroup&quot;</span>);</span><br><span class="line">        skinGroup.selectedToggleProperty().addListener((ob, ov, nv) -&gt;&#123;</span><br><span class="line">            <span class="type">RXToggleButton</span> <span class="variable">btn</span> <span class="operator">=</span> (RXToggleButton) nv;</span><br><span class="line">            <span class="type">String</span> <span class="variable">skinName</span> <span class="operator">=</span> btn.getText(); <span class="comment">//获取按钮上的文本信息</span></span><br><span class="line">            <span class="comment">//将获取到的文本信息转化为 css 文件的名称字符串</span></span><br><span class="line">            <span class="type">String</span> <span class="variable">skinUrl</span> <span class="operator">=</span> Objects.requireNonNull(getClass().getResource(<span class="string">&quot;/css/&quot;</span> + skinName + <span class="string">&quot;.css&quot;</span>)).toExternalForm();</span><br><span class="line">           <span class="comment">// System.out.println(skinUrl);</span></span><br><span class="line">           <span class="comment">//对添加歌曲界面进行换肤</span></span><br><span class="line">            drawerPane.getScene().getRoot().getStylesheets().setAll(skinUrl);</span><br><span class="line">            <span class="comment">//更新主题切换菜单</span></span><br><span class="line">            skinPopup.getScene().getRoot().getStylesheets().setAll(skinUrl);</span><br><span class="line">            <span class="comment">//更新音量滑块</span></span><br><span class="line">            soundPopup.getScene().getRoot().getStylesheets().setAll(skinUrl);</span><br><span class="line">        &#125;) ;</span><br><span class="line"></span><br><span class="line">    &#125; <span class="keyword">catch</span> (IOException e) &#123;</span><br><span class="line">        e.printStackTrace();</span><br><span class="line">    &#125;</span><br><span class="line">    skinPopup.getScene().setRoot(skinRoot);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>添加音乐文件以及登录状态下的歌单同步实现</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">Mysql</span> <span class="variable">mysql</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">Mysql</span>();</span><br><span class="line"><span class="keyword">try</span> &#123;</span><br><span class="line">    mysql.pstmt = mysql.conn.prepareStatement(<span class="string">&quot;insert into music3(num,music) values(?,?)&quot;</span>);</span><br><span class="line">    <span class="keyword">if</span> (fileList != <span class="literal">null</span>) &#123;</span><br><span class="line">            <span class="comment">//开始对文件列表逐个迭代</span></span><br><span class="line">        fileList.forEach(file -&gt; &#123;</span><br><span class="line">                <span class="comment">//只添加当前播放列表中不存在的歌曲</span></span><br><span class="line">            <span class="keyword">if</span> (!items.contains(file)) &#123;</span><br><span class="line">                    items.add(file);</span><br><span class="line">                <span class="keyword">try</span> &#123;</span><br><span class="line">                    mysql.pstmt.setString(<span class="number">1</span>,ac);</span><br><span class="line">                    <span class="comment">// System.out.println(unicodeEncode(file.toString()));</span></span><br><span class="line">                    mysql.pstmt.setString(<span class="number">2</span>,unicodeEncode(file.toString()));</span><br><span class="line">                    mysql.pstmt.executeUpdate();</span><br><span class="line">                    &#125; <span class="keyword">catch</span> (SQLException e) &#123;</span><br><span class="line">                        e.printStackTrace();</span><br><span class="line">                    &#125;</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        );</span><br><span class="line">    &#125;</span><br><span class="line">&#125; <span class="keyword">catch</span> (SQLException e) &#123;</span><br><span class="line">        e.printStackTrace();</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+
+<p>MySQL类的实现</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">Mysql</span> &#123;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">static</span> <span class="keyword">final</span> String JDBC_DRIVER=<span class="string">&quot;com.mysql.jdbc.Driver&quot;</span>;</span><br><span class="line">    <span class="keyword">static</span> <span class="keyword">final</span> <span class="type">String</span> <span class="variable">DB_URL</span> <span class="operator">=</span><span class="string">&quot;jdbc:mysql://localhost:3306/account?useUnicode=true&amp;characterEncoding-utf8&amp;rewriteBatchedStatement=true&amp;useSSL=false&quot;</span>;</span><br><span class="line">    <span class="keyword">static</span> <span class="keyword">final</span> <span class="type">String</span> <span class="variable">USER</span> <span class="operator">=</span><span class="string">&quot;root&quot;</span>;</span><br><span class="line">    <span class="keyword">static</span> <span class="keyword">final</span> <span class="type">String</span> <span class="variable">PASS</span> <span class="operator">=</span><span class="string">&quot;123456&quot;</span>;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> Connection conn;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> Statement stmt;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> PreparedStatement pstmt;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> ResultSet rst;</span><br><span class="line"></span><br><span class="line">    Mysql()&#123;</span><br><span class="line">        conn = <span class="literal">null</span>;</span><br><span class="line">        stmt = <span class="literal">null</span>;</span><br><span class="line">        <span class="keyword">try</span> &#123;</span><br><span class="line">            Class.forName(JDBC_DRIVER);</span><br><span class="line">            <span class="comment">//System.out.println(&quot;连接数据库....&quot;);</span></span><br><span class="line">            conn = DriverManager.getConnection(DB_URL, USER, PASS);</span><br><span class="line">            stmt = conn.createStatement();</span><br><span class="line">        &#125; <span class="keyword">catch</span> (Exception e) &#123;</span><br><span class="line">            e.printStackTrace();</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="（四）系统测试"><a href="#（四）系统测试" class="headerlink" title="（四）系统测试"></a>（四）系统测试</h3><blockquote>
+<ol>
+<li>音乐播放、主界面显示、进度条、歌词显示、频谱显示功能：<br><img src="/../blog_img/qqmusic/1.png" alt="Img" loading="lazy" onerror='this.onerror=null;this.src="/img/404.jpg"'></li>
+</ol>
+</blockquote>
+<blockquote>
+<p>2、添加歌曲界面<br><img src="/../blog_img/qqmusic/2.png" alt="Img" loading="lazy" onerror='this.onerror=null;this.src="/img/404.jpg"'></p>
+</blockquote>
+<blockquote>
+<ol start="3">
+<li>登录界面<br><img src="/../blog_img/qqmusic/3.png" alt="Img" loading="lazy" onerror='this.onerror=null;this.src="/img/404.jpg"'></li>
+</ol>
+</blockquote>
+<blockquote>
+<ol start="4">
+<li>切换主题功能<br><img src="/../blog_img/qqmusic/4.png" alt="Img" loading="lazy" onerror='this.onerror=null;this.src="/img/404.jpg"'><br><img src="/../blog_img/qqmusic/5.png" alt="Img" loading="lazy" onerror='this.onerror=null;this.src="/img/404.jpg"'></li>
+</ol>
+</blockquote>
+<blockquote>
+<ol start="5">
+<li>音量滑块拖动<br><img src="/../blog_img/qqmusic/6.png" alt="Img" loading="lazy" onerror='this.onerror=null;this.src="/img/404.jpg"'></li>
+</ol>
+</blockquote>
+<h3 id="（五）-项目展望"><a href="#（五）-项目展望" class="headerlink" title="（五） 项目展望"></a>（五） 项目展望</h3><p>该项目基于用户喜好开发界面，实现账号同步信息、歌词频谱可视化等功能，用户受众面广泛，用户需求量大，能够给予用户一个听音乐的良好平台，在未来市场发展中具有不可忽略的优势。</p>
+
+</article>
+    
+    
+</div>
+<div id="post-next-prev" class="row">
+    <div class="col-lg-12">
+        <!-- title -->
+        <h5 class="trm-title-with-divider">
+            Other Articles
+            <span data-number="02"></span>
+        </h5>
+    </div>
+    
+    
+        <div class="col-lg-6">
+    <div class="trm-blog-card trm-scroll-animation" data-scroll data-scroll-offset="40">
+        <a href="/2023/03/18/tsp/" class="trm-cover-frame trm-anima-link">
+            
+            
+                <img alt="cover" class="no-fancybox" src="/img/block.jpg">
+            
+        </a>
+        
+        <div class="trm-card-descr">
+            <div class="trm-label trm-category trm-mb-20">
+                <a href=" /categories/%E7%AE%97%E6%B3%95/">
+                    算法
+                </a>
+            </div>
+            <h5>
+                <a href="/2023/03/18/tsp/" class="trm-anima-link">
+                    TSP问题
+                </a>
+            </h5>
+            <div class="trm-divider trm-mb-20 trm-mt-20"></div>
+            <ul class="trm-card-data trm-label">
+                <li>23/03/18</li>
+                <li>13:42</li>
+                
+                
+            </ul>
+        </div>
+    </div>
+</div>
+    
+</div>
+
+    
+
+
+
+                    <div class="trm-divider footer-divider"></div>
+
+                    <!-- footer -->
+                    <footer class="trm-scroll-animation" data-scroll data-scroll-offset="50">
+
+    
+
+    
+
+    
+        <div class="trm-footer-item">
+            <span>
+                Powered by <a href="https://hexo.io" target="_blank" rel="noopener">Hexo</a> v6.3.0
+            </span>
+            <span class="footer-separator" data-separator=" | "></span>
+            <span> 
+                Theme - 
+                <a rel="noopener" href='https://github.com/MaLuns/hexo-theme-async' target='_blank'>Async</a>
+                v2.0.3
+            </span>
+        </div>
+      
+
+     
+
+     
+</footer>
+ 
+                    <!-- footer end -->
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+            <!-- body end -->
+
+            <div class="trm-fixed-container" data-scroll data-scroll-sticky data-scroll-target=".locomotive-scroll__sticky-target" data-scroll-offset="-10">
+    
+        <div class="trm-fixed-btn" data-title="Read Mode" onclick="asyncFun.switchReadMode()">
+            <i class="iconfont fas fa-book-reader"></i>
+        </div>
+    
+    
+    <div id="trm-back-top" class="trm-fixed-btn" data-title="Back To Top">
+        <i class="iconfont fas fa-arrow-up"></i>
+    </div>
+</div>
+          </div>
+        </div>
+      </div>
+      <!-- scroll container end -->
+
+  </div>
+  <!-- app wrapper end -->
+
+  
+  <!-- Plugin -->
+
+
+
+
+    
+    
+<script src="https://unpkg.com/locomotive-scroll@4.1.4/dist/locomotive-scroll.min.js"></script>
+
+    
+<script src="https://unpkg.com/@fancyapps/ui@4.0/dist/fancybox.umd.js"></script>
+
+    
+
+    
+
+    
+
+    <!-- 数学公式 -->
+    
+
+    <!-- 评论插件 -->
+    
+        
+
+        
+    
+
+
+
+<!-- CDN -->
+
+
+    
+
+    
+
+    
+
+
+
+
+    <!-- Service Worker -->
+    
+    <!-- baidu push -->
+    
+
+
+<script id="async-script" src="/js/main.js?v=2.0.3"></script>
+
+</body>
+
+</html>
