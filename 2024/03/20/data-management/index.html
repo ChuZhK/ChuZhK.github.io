@@ -1,0 +1,694 @@
+<!DOCTYPE html>
+<html lang="zh-Hans">
+
+<head>
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+<meta name="x5-fullscreen" content="true">
+<meta name="full-screen" content="yes">
+<meta name="theme-color" content="#317EFB" />
+<meta content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=0" name="viewport">
+<meta name="description" content="data_manager.py1. 导包1234567891011from torch.utils.data import Dataset, ConcatDatasetimport torchvisionfrom torchvision import datasets, transformsfrom torchvision.transforms import ToTensorfrom collec">
+<meta property="og:type" content="article">
+<meta property="og:title" content="data_management">
+<meta property="og:url" content="http://example.com/2024/03/20/data-management/index.html">
+<meta property="og:site_name" content="储震坤的个人博客">
+<meta property="og:description" content="data_manager.py1. 导包1234567891011from torch.utils.data import Dataset, ConcatDatasetimport torchvisionfrom torchvision import datasets, transformsfrom torchvision.transforms import ToTensorfrom collec">
+<meta property="og:locale">
+<meta property="og:image" content="http://example.com/img/404.jpg">
+<meta property="article:published_time" content="2024-03-20T03:14:11.000Z">
+<meta property="article:modified_time" content="2024-03-20T06:38:16.795Z">
+<meta property="article:author" content="Zhenkun Chu">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://example.com/img/404.jpg">
+
+
+<title >data_management</title>
+
+<!-- Favicon -->
+
+    <link href='/img/favicon.svg?v=2.0.3' rel='icon' type='image/png' sizes='16x16' ></link>
+
+
+    <link href='/img/favicon.svg?v=2.0.3' rel='icon' type='image/png' sizes='32x32' ></link>
+
+
+
+
+<!-- Plugin -->
+
+
+
+
+    
+<link rel="stylesheet" href="/css/plugins/bootstrap.row.css">
+
+    
+<link rel="stylesheet" href="https://unpkg.com/locomotive-scroll@4.1.4/dist/locomotive-scroll.min.css">
+
+    
+<link rel="stylesheet" href="https://unpkg.com/@fancyapps/ui@4.0/dist/fancybox.css">
+
+    
+    
+
+
+
+
+<!-- Icon -->
+
+    
+<link rel="stylesheet" href="/css/plugins/font-awesome.min.css">
+
+
+
+
+<!-- Variable -->
+<script>window.ASYNC_CONFIG = {"hostname":"example.com","author":"Zhenkun Chu","root":"/","typed_text":["SSEer from SYSU"],"theme_version":"2.0.3","theme":{"switch":true,"default":"style-light"},"favicon":{"logo":"/img/favicon.svg","icon16":"/img/favicon.svg","icon32":"/img/favicon.svg","appleTouchIcon":null,"webmanifest":null,"visibilitychange":false,"hidden":"/failure.ico","showText":"(/≧▽≦/)咦！又好了！","hideText":"(●—●)喔哟，崩溃啦！"},"i18n":{"placeholder":"搜索...","empty":"找不到您查询的内容: ${query}","hits":"找到 ${hits} 条结果","hits_time":"找到 ${hits} 条结果（用时 ${time} 毫秒）","author":"本文作者：","copyright_link":"本文链接：","copyright_license_title":"版权声明：","copyright_license_content":"本博客所有文章除特别声明外，均默认采用 undefined 许可协议。","copy_success":"复制成功","copy_failure":"复制失败","open_read_mode":"进入阅读模式","exit_read_mode":"退出阅读模式","notice_outdate_message":"距离上次更新已经 undefined 天了, 文章内容可能已经过时。","just":"刚刚","min":"分钟前","hour":"小时前","day":"天前","month":"个月前"},"swup":false,"plugin":{"flickr_justified_gallery":"https://unpkg.com/flickr-justified-gallery@latest/dist/fjGallery.min.js"},"icons":{"sun":"far fa-sun","moon":"far fa-moon","play":"fas fa-play","email":"far fa-envelope","next":"fas fa-arrow-right","calendar":"far fa-calendar-alt","clock":"far fa-clock","user":"far fa-user","back_top":"fas fa-arrow-up","close":"fas fa-times","search":"fas fa-search","reward":"fas fa-hand-holding-usd","user_tag":"fas fa-user-alt","toc_tag":"fas fa-th-list","read":"fas fa-book-reader","arrows":"fas fa-arrows-alt-h","double_arrows":"fas fa-angle-double-down","copy":"fas fa-copy"},"icontype":"font","highlight":{"plugin":"highlighjs","theme":true,"copy":true,"lang":true,"title":"default","height_limit":false}};</script>
+<script id="async-page-config">window.PAGE_CONFIG = {"isPost":true,"isHome":false,"postUpdate":"2024-03-20 14:38:16"};</script>
+
+<!-- Theme mode css -->
+<link data-swup-theme rel="stylesheet" href="/css/index.css?v=2.0.3" id="trm-switch-style">
+<script>
+    let defaultMode = ASYNC_CONFIG.theme.default !=='auto' ?  ASYNC_CONFIG.theme.default : (window.matchMedia("(prefers-color-scheme: light)").matches ? 'style-light' : 'style-dark')
+    let catchMode = localStorage.getItem('theme-mode') || defaultMode;
+    let type = catchMode === 'style-dark' ? 'add' : 'remove';
+    document.documentElement.classList[type]('dark')
+</script>
+
+<!-- CDN -->
+
+
+    
+    
+
+
+
+<!-- Site Analytics -->
+ 
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+<body>
+
+  <!-- app wrapper -->
+  <div class="trm-app-frame">
+
+    <!-- page preloader -->
+    <div class="trm-preloader">
+    <div class="trm-holder">
+        <div class="preloader">
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+        </div>
+    </div>
+</div>
+    <!-- page preloader end -->
+
+    <!-- change mode preloader -->
+    <div class="trm-mode-swich-animation-frame">
+    <div class="trm-mode-swich-animation">
+        <i class="i-sun"><i class="iconfont far fa-sun"></i></i>
+        <div class="trm-horizon"></div>
+        <i class="i-moon"><i class="iconfont far fa-moon"></i></i>
+    </div>
+</div>
+    <!-- change mode preloader end -->
+
+      <!-- scroll container -->
+      <div id="trm-dynamic-content" class="trm-swup-animation">
+        <div id="trm-scroll-container" class="trm-scroll-container" data-scroll-container style="opacity: 0">
+          <div data-scroll-section id="content" class="trm-scroll-section">
+
+            <div class="locomotive-scroll__sticky-target" style="position: absolute; top: 0; left: 0; right: 0; bottom: 0; pointer-events: none;"></div>
+
+            <!-- top bar -->
+            <header class="trm-top-bar" data-scroll data-scroll-sticky data-scroll-target=".locomotive-scroll__sticky-target" data-scroll-offset="-10">
+	<div class="container">
+		<div class="trm-left-side">
+			<!-- logo -->
+<a href="/" class="trm-logo-frame trm-anima-link">
+    
+        <img alt="logo" src="/img/favicon.svg">
+    
+    
+        <div class="trm-logo-text">
+            Chu<span>ZhK</span>
+        </div>
+    
+</a>
+<!-- logo end -->
+		</div>
+		<div class="trm-right-side">
+			<!-- menu -->
+<div class="trm-menu">
+    <nav>
+        <ul>
+            
+            <li class="menu-item-has-children ">
+                <a  href="/" target="">
+                    首页
+                </a>
+                
+            </li>
+            
+            <li class="menu-item-has-children ">
+                <a  href="/archives/" target="">
+                    归档
+                </a>
+                
+            </li>
+            
+            <li class="menu-item-has-children ">
+                <a  href="/about/" target="">
+                    关于
+                </a>
+                
+            </li>
+            
+        </ul>
+    </nav>
+</div>
+<!-- menu end -->
+			
+    <!-- mode switcher place -->
+    <div class="trm-mode-switcher-place">
+        <div class="trm-mode-switcher">
+            <i class="iconfont far fa-sun"></i>
+            <input class="tgl tgl-light" id="trm-swich" type="checkbox">
+            <label class="trm-swich" for="trm-swich"></label>
+            <i class="iconfont far fa-moon"></i>
+        </div>
+    </div>
+    <!-- mode switcher place end -->
+
+			
+		</div>
+		<div class="trm-menu-btn">
+			<span></span>
+		</div>
+	</div>
+</header>
+            <!-- top bar end -->
+
+            <!-- body -->
+            
+<div class="trm-content-start">
+    <!-- banner -->
+    <div class="trm-banner" data-scroll data-scroll-direction="vertical">
+    
+    <!-- banner cover -->
+    <img style="object-position:top;object-fit:cover;" alt="banner" class="trm-banner-cover" data-scroll data-scroll-direction="vertical" data-scroll-speed="-3" src="/img/a10.jpg">
+    <!-- banner cover end -->
+    
+
+    <!-- banner content -->
+    <div class="trm-banner-content trm-overlay">
+        <div class="container" data-scroll data-scroll-direction="vertical" data-scroll-speed="0">
+            <div class="row">
+                
+                <div class="col-lg-4"></div>
+                
+                <div class="col-lg-8">
+
+                    <!-- banner title -->
+                    <div class="trm-banner-text ">
+                        <div class="trm-label trm-mb-20">
+                            NEWS LETTER
+                        </div>
+                        <h1 class="trm-mb-30 trm-hsmb-font">
+                            data_management
+                        </h1>
+
+                        
+                            <ul class="trm-breadcrumbs trm-label">
+                                <li>
+                                    <a href="/" class="trm-anima-link">Home</a>
+                                </li>
+                                <li>
+                                    <span>
+                                        2024
+                                    </span
+                                ></li>
+                            </ul>
+                        
+                    </div>
+                    <!-- banner title end -->
+
+                    <!-- scroll hint -->
+                    <a href="#about-triger" data-scroll-to="#about-triger" data-scroll-offset="-130" class="trm-scroll-hint-frame">
+                        <div class="trm-scroll-hint"></div>
+                        <span class="trm-label">Scroll down</span>
+                    </a>
+                    <!-- scroll hint end -->
+
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- banner content end -->
+</div>
+    <!-- banner end -->
+    <div class="container">
+        <div class="row">
+            
+                <div id="page-sidebar" class="col-lg-4 hidden-sm">
+                    <!-- main card -->
+                    
+
+<div class="trm-main-card-frame trm-sidebar">
+    <div class="trm-main-card" data-scroll data-scroll-repeat data-scroll-sticky data-scroll-target=".locomotive-scroll__sticky-target" data-scroll-offset="60"> 
+    
+        <!-- card header -->
+<div class="trm-mc-header">
+    <div class="trm-avatar-frame trm-mb-20">
+        <img alt="Avatar" class="trm-avatar" src="/img/1234.jpg">
+    </div>
+    <h5 class="trm-name trm-mb-15">
+        Chu ZhK
+    </h5>
+    
+        <div class="trm-label">
+            I`m
+            <span class="trm-typed-text">
+                <!-- Words for theme.user.typedText -->
+            </span>
+        </div>
+    
+</div>
+<!-- card header end -->
+        <!-- sidebar social -->
+
+<div class="trm-divider trm-mb-40 trm-mt-40"></div>
+<div class="trm-social">
+    
+        <a href="https://github.com/ChuZhK" title="Github" rel="nofollow" target="_blank">
+            <i class="iconfont fab fa-github"></i>
+        </a>
+    
+        <a href="/1101405744@qq.com" title="QQ" rel="nofollow" target="_blank">
+            <i class="iconfont fab fa-qq"></i>
+        </a>
+    
+        <a href="https://space.bilibili.com/660718431?spm_id_from=333.1007.0.0" title="bilibili" rel="nofollow" target="_blank">
+            <i class="iconfont fab fa-bimobject"></i>
+        </a>
+    
+</div>
+
+<!-- sidebar social end -->
+        <!-- info -->
+<div class="trm-divider trm-mb-40 trm-mt-40"></div>
+<ul class="trm-table trm-mb-20">
+    
+        <li>
+            <div class="trm-label">
+                School:
+            </div>
+            <div class="trm-label trm-label-light">
+                SYSU
+            </div>
+        </li>
+    
+        <li>
+            <div class="trm-label">
+                Residence:
+            </div>
+            <div class="trm-label trm-label-light">
+                ZhuHai
+            </div>
+        </li>
+    
+</ul>
+<!-- info end -->
+
+        
+    <div class="trm-divider trm-mb-40 trm-mt-40"></div>
+    <!-- action button -->
+    <div class="text-center">
+        <a href="mailto:1101405744@qq.com" class="trm-btn">
+            联系我
+            <i class="iconfont far fa-envelope"></i>
+        </a>
+    </div>
+    <!-- action button end -->
+
+    
+    </div>
+</div>
+                    <!-- main card end -->
+                </div>
+            
+            <div id="page-content" class="col-lg-8">
+                <div class="trm-content" id="trm-content">
+                    <div data-scroll data-scroll-repeat data-scroll-offset="500" id="about-triger"></div>
+
+                    <div id="post-info" class="row hidden-sm">
+    <div class="col-sm-4">
+        <div class="trm-card trm-label trm-label-light text-center">
+            <i class="iconfont far fa-calendar-alt trm-icon"></i><br>
+            03/20
+        </div>
+    </div>
+    <div class="col-sm-4">
+        <div class="trm-card trm-label trm-label-light text-center">
+            <i class="iconfont far fa-clock trm-icon"></i><br>
+            11:14
+        </div>
+    </div>
+    <div class="col-sm-4">
+        <div id="post-author" class="trm-card trm-label trm-label-light text-center">
+            <i class="iconfont far fa-user trm-icon"></i><br>
+            Zhenkun Chu
+        </div>
+    </div>
+</div>
+<div class="trm-card ">
+    <article id="article-container" class="trm-publication">
+    <h1 id="data-manager-py"><a href="#data-manager-py" class="headerlink" title="data_manager.py"></a>data_manager.py</h1><h2 id="1-导包"><a href="#1-导包" class="headerlink" title="1. 导包"></a>1. 导包</h2><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> torch.utils.data <span class="keyword">import</span> Dataset, ConcatDataset</span><br><span class="line"><span class="keyword">import</span> torchvision</span><br><span class="line"><span class="keyword">from</span> torchvision <span class="keyword">import</span> datasets, transforms</span><br><span class="line"><span class="keyword">from</span> torchvision.transforms <span class="keyword">import</span> ToTensor</span><br><span class="line"><span class="keyword">from</span> collections <span class="keyword">import</span> Counter</span><br><span class="line"><span class="keyword">from</span> pathlib <span class="keyword">import</span> Path</span><br><span class="line"></span><br><span class="line"><span class="comment"># from client_manager import get_targets # Varför funkar ej detta!?</span></span><br><span class="line"><span class="keyword">import</span> math</span><br><span class="line"><span class="keyword">import</span> numpy <span class="keyword">as</span> np</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<h2 id="2-get-targets-data"><a href="#2-get-targets-data" class="headerlink" title="2. get_targets(data)"></a>2. get_targets(data)</h2><p>结合后面的文件来看，这里的参数 data 就是类DatasetSplit的实例，因此这个函数返回的内容就是数据的 __标签列表__。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">def</span> <span class="title function_">get_targets</span>(<span class="params">data</span>):</span><br><span class="line">    <span class="keyword">return</span> [data.__getitem__(i)[<span class="number">1</span>] <span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(data.__len__())]</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>__ <strong>getitem</strong> __ 是类里面的一个方法。<br>如果一个类定义了该方法，就可以通过类的对象p, 以 p[key] 的方式调用该函数</p>
+</blockquote>
+<p><img src="/../blog_img/data_management/1.png" alt="Img" loading="lazy" onerror='this.onerror=null;this.src="/img/404.jpg"'></p>
+<p>该函数在当前文件中被调用，传入参数为 “dataset”</p>
+<h2 id="3-load-dataset"><a href="#3-load-dataset" class="headerlink" title="3. load_dataset()"></a>3. load_dataset()</h2><p>参数：</p>
+<p>n_train_and_val: 训练集和验证集数量</p>
+<h3 id="step1-判断数据集类型并加载data-set-和-test-set"><a href="#step1-判断数据集类型并加载data-set-和-test-set" class="headerlink" title="step1: 判断数据集类型并加载data_set 和 test_set"></a>step1: 判断数据集类型并加载data_set 和 test_set</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span> args.dataset == <span class="string">&quot;CIFAR-10&quot;</span>:</span><br><span class="line">    download = <span class="keyword">not</span> Path(<span class="string">&quot;data/cifar-10-batches-py&quot;</span>).is_dir()</span><br><span class="line">    train_set = torchvision.datasets.CIFAR10(</span><br><span class="line">        root=<span class="string">&quot;./data&quot;</span>, train=<span class="literal">True</span>, download=download, transform=transform</span><br><span class="line">    )</span><br><span class="line">    test_set = torchvision.datasets.CIFAR10(</span><br><span class="line">        root=<span class="string">&quot;./data&quot;</span>, train=<span class="literal">False</span>, download=download, transform=transform</span><br><span class="line">    )</span><br><span class="line"><span class="keyword">elif</span> args.dataset == <span class="string">&quot;Fashion-MNIST&quot;</span>:</span><br><span class="line">    download = <span class="keyword">not</span> Path(<span class="string">&quot;data/FashionMNIST&quot;</span>).is_dir()</span><br><span class="line">    train_set = ...</span><br><span class="line">    test_set = ...</span><br></pre></td></tr></table></figure>
+<p><code>Path(&quot;***&quot;).is_dir()</code>即判断是否存在 “***” 的文件夹，前面再加一个 <code>not</code> 将返回结果取反</p>
+<p><code>torchvision.datasets.CIFAR10()</code>参数说明</p>
+<blockquote>
+<p>root (string):数据集所在目录的根目录 如果download设置为True。“cifar-10-batches-py ‘”存在，则将被保存至该目录<br>train ：如果为True，则从训练集创建数据集，否则从测试集创建。<br>transform::(bool，可选)一个接受PIL图像的函数&#x2F;变换 并返回转换后的版本。 如”transforms“,“RandomCrop”<br>target_transform：(可调用，可选):一个作用于目的转换函数。<br>download (bool，可选):如果为true，则从internet下载数据集 ,将其放在根目录中。 如果数据集已经下载，则不会 再次下载。</p>
+</blockquote>
+<h3 id="step2：-默认-用于训练和验证的数据大小就是训练集大小"><a href="#step2：-默认-用于训练和验证的数据大小就是训练集大小" class="headerlink" title="step2： 默认 用于训练和验证的数据大小就是训练集大小"></a>step2： 默认 用于训练和验证的数据大小就是训练集大小</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span> n_train_and_val == <span class="literal">None</span>:</span><br><span class="line">    n_train_and_val = <span class="built_in">len</span>(train_set)</span><br></pre></td></tr></table></figure>
+
+<h3 id="step3-判断是否为两个簇的中心训练（是否为异构环境？待定）-并设置对应的训练数据集"><a href="#step3-判断是否为两个簇的中心训练（是否为异构环境？待定）-并设置对应的训练数据集" class="headerlink" title="step3: 判断是否为两个簇的中心训练（是否为异构环境？待定） 并设置对应的训练数据集"></a>step3: 判断是否为两个簇的中心训练（是否为异构环境？待定） 并设置对应的训练数据集</h3><p>是：  <code>train_set</code>和<code>test_set</code> 中一半的数据都 <strong>不进行旋转</strong></p>
+<p>不进行旋转的数据，其图片预处理如下：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">transform_standard = transforms.Compose(</span><br><span class="line">            [</span><br><span class="line">                <span class="comment">#图片转化为张量</span></span><br><span class="line">                transforms.ToTensor(),</span><br><span class="line">                <span class="comment">#用均值和标准差归一化张量图像</span></span><br><span class="line">                transforms.Normalize((<span class="number">0.5</span>, <span class="number">0.5</span>, <span class="number">0.5</span>), (<span class="number">0.5</span>, <span class="number">0.5</span>, <span class="number">0.5</span>)), </span><br><span class="line">            ]</span><br><span class="line">        )</span><br></pre></td></tr></table></figure>
+
+
+
+<h3 id="step4-设置一个-tuple-里面装-CIFAR10-的标签"><a href="#step4-设置一个-tuple-里面装-CIFAR10-的标签" class="headerlink" title="step4: 设置一个 tuple 里面装 CIFAR10 的标签"></a>step4: 设置一个 tuple 里面装 CIFAR10 的标签</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">classes = (</span><br><span class="line">    <span class="string">&quot;plane&quot;</span>,</span><br><span class="line">    <span class="string">&quot;car&quot;</span>,</span><br><span class="line">    <span class="string">&quot;bird&quot;</span>,</span><br><span class="line">    <span class="string">&quot;cat&quot;</span>,</span><br><span class="line">    <span class="string">&quot;deer&quot;</span>,</span><br><span class="line">    <span class="string">&quot;dog&quot;</span>,</span><br><span class="line">    <span class="string">&quot;frog&quot;</span>,</span><br><span class="line">    <span class="string">&quot;horse&quot;</span>,</span><br><span class="line">    <span class="string">&quot;ship&quot;</span>,</span><br><span class="line">    <span class="string">&quot;truck&quot;</span>,</span><br><span class="line">)</span><br></pre></td></tr></table></figure>
+
+
+<h3 id="step5-函数返回-数据集（train-set）-训练集（test-set）-设置的tuple（classes）"><a href="#step5-函数返回-数据集（train-set）-训练集（test-set）-设置的tuple（classes）" class="headerlink" title="step5: 函数返回 数据集（train_set）,训练集（test_set）,设置的tuple（classes）"></a>step5: 函数返回 数据集（train_set）,训练集（test_set）,设置的tuple（classes）</h3><h2 id="4-DatasetSplit类"><a href="#4-DatasetSplit类" class="headerlink" title="4. DatasetSplit类"></a>4. DatasetSplit类</h2><p>该类将数据集和索引编号对应，可以通过编号获取 某条数据（图片和标签）</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">DatasetSplit</span>(<span class="title class_ inherited__">Dataset</span>):</span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">__init__</span>(<span class="params">self, dataset, idxs</span>):</span><br><span class="line">        self.dataset = dataset     <span class="comment">#数据集</span></span><br><span class="line">        self.idxs = <span class="built_in">list</span>(idxs)     <span class="comment">#数据列表</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">__len__</span>(<span class="params">self</span>):</span><br><span class="line">        <span class="keyword">return</span> <span class="built_in">len</span>(self.idxs)     <span class="comment">#数据列表的长度</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">__getitem__</span>(<span class="params">self, item</span>):   <span class="comment">#该方法可根据“数据编号”获取数据，包括图片和对应标签</span></span><br><span class="line">        image, label = self.dataset[self.idxs[item]]</span><br><span class="line">        <span class="keyword">return</span> image, label</span><br></pre></td></tr></table></figure>
+
+<h2 id="5-DeviceDataLoader类"><a href="#5-DeviceDataLoader类" class="headerlink" title="5. DeviceDataLoader类"></a>5. DeviceDataLoader类</h2><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">DeviceDataLoader</span>:</span><br><span class="line">    <span class="string">&quot;&quot;&quot;Wrap a dataloader to move data to a device&quot;&quot;&quot;</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">__init__</span>(<span class="params">self, dl, device</span>):</span><br><span class="line">        self.dl = dl  <span class="comment"># DataLoader</span></span><br><span class="line">        self.device = device</span><br><span class="line"></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">__iter__</span>(<span class="params">self</span>):</span><br><span class="line">        <span class="string">&quot;&quot;&quot;Yield a batch of data after moving it to device&quot;&quot;&quot;</span></span><br><span class="line">        <span class="comment"># self.dl 是 Dataloder，因此 b 就是从 dataset 里面取出来的大小为batchsize的一小节数据 </span></span><br><span class="line">        <span class="keyword">for</span> b <span class="keyword">in</span> self.dl:</span><br><span class="line">            <span class="keyword">yield</span> to_device(b, self.device)   </span><br><span class="line">        <span class="comment"># to_device 是文件中的另一个函数，其作用是将数据张量移到设备上</span></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">__len__</span>(<span class="params">self</span>):</span><br><span class="line">        <span class="string">&quot;&quot;&quot;Number of batches&quot;&quot;&quot;</span></span><br><span class="line">        <span class="keyword">return</span> <span class="built_in">len</span>(self.dl)</span><br></pre></td></tr></table></figure>
+
+<p>其中的<code>__iter__</code>方法含有关键字<code>yield</code>所以是一个迭代器，具体看<a target="_blank" rel="noopener" href="https://blog.csdn.net/mieleizhi0522/article/details/82142856">python中yield关键字</a></p>
+<h2 id="6-to-device"><a href="#6-to-device" class="headerlink" title="6. to_device()"></a>6. to_device()</h2><p>第5点 DeviceDataLoader 类中的迭代器调用了 该方法<br>调用时，传入的参数是  {data:一小节数据, device：设备}<br><strong>传入的是一小节数据则对逐条数据进行处理<br>传入的是一条数据则将其装入设备</strong></p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">def</span> <span class="title function_">to_device</span>(<span class="params">data, device</span>):</span><br><span class="line">    <span class="string">&quot;&quot;&quot;Move tensor(s) to chosen device&quot;&quot;&quot;</span></span><br><span class="line">    <span class="keyword">if</span> <span class="built_in">isinstance</span>(data, (<span class="built_in">list</span>, <span class="built_in">tuple</span>)):</span><br><span class="line">        <span class="comment">#传入的是一小节数据则对逐条数据进行处理</span></span><br><span class="line">        <span class="keyword">return</span> [to_device(x, device) <span class="keyword">for</span> x <span class="keyword">in</span> data]</span><br><span class="line">    <span class="comment">#传入的是一条数据则将其装入设备</span></span><br><span class="line">    <span class="keyword">return</span> data.to(device, non_blocking=<span class="literal">True</span>)</span><br></pre></td></tr></table></figure>
+<p><code>data.to()</code> 是pytorch的to()方法，这里的用法是将 张量&#x2F;模型 放到gpu上。<br>to()方法的返回值是一个Tensor，它会返回一个与原Tensor相同数据类型（如果未指定新数据类型）、形状和对应设备存储空间的新Tensor。</p>
+<h2 id="7-split-data-label-dataset-dataset-test-n"><a href="#7-split-data-label-dataset-dataset-test-n" class="headerlink" title="7. split_data_label(dataset, dataset_test, n)"></a>7. split_data_label(dataset, dataset_test, n)</h2><p>该方法将数据集按标签种类均分为n组，每组数据的标签种类不同。<br>即数据集有 num_labels  种不同的标签，每组有 num_labels&#x2F;n 种不同标签<br>返回训练集和测试集的字典，以0 ~ n-1 为key，value为DatasetSplit类，可以根据索引编号获取数据。</p>
+<h3 id="step1-获取"><a href="#step1-获取" class="headerlink" title="step1: 获取"></a>step1: 获取</h3><h3 id="训练集：数据索引列表、标签列表、去重的标签列表、标签种类数"><a href="#训练集：数据索引列表、标签列表、去重的标签列表、标签种类数" class="headerlink" title="训练集：数据索引列表、标签列表、去重的标签列表、标签种类数"></a>训练集：数据索引列表、标签列表、去重的标签列表、标签种类数</h3><h3 id="测试集：索引列表、标签列表"><a href="#测试集：索引列表、标签列表" class="headerlink" title="测试集：索引列表、标签列表"></a>测试集：索引列表、标签列表</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#训练集</span></span><br><span class="line">idxs = np.arange(<span class="built_in">len</span>(dataset), dtype=<span class="built_in">int</span>)</span><br><span class="line">labels = np.array(get_targets(dataset))</span><br><span class="line">unique_labels = np.unique(labels)</span><br><span class="line">num_classes = <span class="built_in">len</span>(unique_labels)</span><br><span class="line"><span class="comment">#测试集</span></span><br><span class="line">idxs_test = np.arange(<span class="built_in">len</span>(dataset_test), dtype=<span class="built_in">int</span>)</span><br><span class="line">labels_test = np.array(get_targets(dataset_test))</span><br></pre></td></tr></table></figure>
+
+
+
+<h3 id="step2：将去重的标签列表转化为-n-1-的二维列表-labels-cluster"><a href="#step2：将去重的标签列表转化为-n-1-的二维列表-labels-cluster" class="headerlink" title="step2：将去重的标签列表转化为(n,-1)的二维列表 labels_cluster"></a>step2：将去重的标签列表转化为(n,-1)的二维列表 labels_cluster</h3><p>与直接 reshape() 不同的是每个子列表中的标签都是在满足不重复条件下随机选取的</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">labels_cluster = &#123;&#125;</span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(n):</span><br><span class="line">    labels_cluster[i] = np.random.choice(</span><br><span class="line">        unique_labels, <span class="built_in">int</span>(num_classes / n), replace=<span class="literal">False</span></span><br><span class="line">    )</span><br><span class="line">    unique_labels = <span class="built_in">list</span>(<span class="built_in">set</span>(unique_labels) - <span class="built_in">set</span>(labels_cluster[i]))</span><br></pre></td></tr></table></figure>
+
+<h3 id="step3-将打乱后的标签与数据的索引对应"><a href="#step3-将打乱后的标签与数据的索引对应" class="headerlink" title="step3: 将打乱后的标签与数据的索引对应"></a>step3: 将打乱后的标签与数据的索引对应</h3><p><code>train_sets</code> 和 <code>test_sets</code>都是形状为 <strong>[n,num_classes&#x2F;n,-1]</strong> 的三维列表</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">train_sets = &#123;&#125;</span><br><span class="line">test_sets = &#123;&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(n):</span><br><span class="line">    train_idxs = np.array([], dtype=<span class="string">&quot;int64&quot;</span>)</span><br><span class="line">    test_idxs = np.array([], dtype=<span class="string">&quot;int64&quot;</span>)</span><br><span class="line">    <span class="keyword">for</span> label <span class="keyword">in</span> labels_cluster[i]:</span><br><span class="line">        train_idxs_ = idxs[label == labels[idxs]]</span><br><span class="line">        train_idxs = np.concatenate((train_idxs, train_idxs_))</span><br><span class="line">        test_idxs_ = idxs_test[label == labels_test[idxs_test]]</span><br><span class="line">        test_idxs = np.concatenate((test_idxs, test_idxs_))</span><br><span class="line"></span><br><span class="line">    train_sets[i] = DatasetSplit(dataset, train_idxs)</span><br><span class="line">    test_sets[i] = DatasetSplit(dataset_test, test_idxs)</span><br></pre></td></tr></table></figure>
+
+<h3 id="step4-返回按标签打乱的数据集"><a href="#step4-返回按标签打乱的数据集" class="headerlink" title="step4: 返回按标签打乱的数据集"></a>step4: 返回按标签打乱的数据集</h3><h2 id="8-generate-iid-data"><a href="#8-generate-iid-data" class="headerlink" title="8. generate_iid_data()"></a>8. generate_iid_data()</h2><p>将数据随机均分给 n_clients 个客户端，每条数据只会出现在一个客户端中，不会有重复分配的情况。<br>返回 <strong>{客户端id: 数据索引编号列表}</strong> 的字典。</p>
+<h3 id="step1-判断数据是否够用，不够则结束运行"><a href="#step1-判断数据是否够用，不够则结束运行" class="headerlink" title="step1: 判断数据是否够用，不够则结束运行"></a>step1: 判断数据是否够用，不够则结束运行</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span> n_clients * args.n_train_and_val &gt; <span class="built_in">len</span>(dataset):</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">f&quot;<span class="subst">&#123;n_clients&#125;</span> * <span class="subst">&#123;args.n_train_and_val&#125;</span> &gt; <span class="subst">&#123;<span class="built_in">len</span>(dataset)&#125;</span>&quot;</span>)</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&quot;Not enough data&quot;</span>)</span><br><span class="line">    exit()</span><br></pre></td></tr></table></figure>
+
+
+<h3 id="step2-对于每个客户端，按比例选取训练集和验证集"><a href="#step2-对于每个客户端，按比例选取训练集和验证集" class="headerlink" title="step2: 对于每个客户端，按比例选取训练集和验证集"></a>step2: 对于每个客户端，按比例选取训练集和验证集</h3><blockquote>
+<ol>
+<li>比例大小取决于参数 <strong>val_proportion</strong></li>
+<li>选取 训练集和验证集 在代码上体现出来是建立一个字典， 将客户端作为key, 数据对应的索引编号作为 value。</li>
+<li>不同客户端之间数据、同一客户端的训练集和验证集数据 都是不重复的。</li>
+</ol>
+</blockquote>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(n_clients):</span><br><span class="line">    <span class="comment"># 客户端——训练集 字典</span></span><br><span class="line">    dict_clients[i] = np.random.choice(</span><br><span class="line">        all_idxs,</span><br><span class="line">        <span class="built_in">round</span>(args.n_train_and_val * (<span class="number">1</span> - args.val_proportion)),</span><br><span class="line">        replace=<span class="literal">False</span>,</span><br><span class="line">    )</span><br><span class="line">    <span class="comment"># 利用set数据类型的运算保证不重复</span></span><br><span class="line">    all_idxs = <span class="built_in">list</span>(<span class="built_in">set</span>(all_idxs) - <span class="built_in">set</span>(dict_clients[i]))</span><br><span class="line">    <span class="comment"># 客户端——验证集 字典</span></span><br><span class="line">    dict_clients_val[i] = np.random.choice(</span><br><span class="line">        all_idxs, <span class="built_in">round</span>(args.n_train_and_val * args.val_proportion), replace=<span class="literal">False</span></span><br><span class="line">    )</span><br><span class="line">    all_idxs = <span class="built_in">list</span>(<span class="built_in">set</span>(all_idxs) - <span class="built_in">set</span>(dict_clients_val[i]))</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<h3 id="step3-验证测试集数据是否够用并建立-客户端——测试集-字典"><a href="#step3-验证测试集数据是否够用并建立-客户端——测试集-字典" class="headerlink" title="step3: 验证测试集数据是否够用并建立 客户端——测试集 字典"></a>step3: 验证测试集数据是否够用并建立 客户端——测试集 字典</h3><p>验证测试集是否够用</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span> n_clients * args.n_test &gt; <span class="built_in">len</span>(dataset_test):</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">f&quot;<span class="subst">&#123;n_clients&#125;</span> * <span class="subst">&#123;args.n_test&#125;</span> &gt; <span class="subst">&#123;<span class="built_in">len</span>(dataset_test)&#125;</span>&quot;</span>)</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&quot;Not enough data&quot;</span>)</span><br><span class="line">    exit()</span><br></pre></td></tr></table></figure>
+<p>建立 客户端——测试集 字典</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(n_clients):</span><br><span class="line">    dict_clients_test[i] = np.random.choice(</span><br><span class="line">        all_idxs_test, <span class="built_in">int</span>(args.n_test), replace=<span class="literal">False</span></span><br><span class="line">    )</span><br><span class="line">    all_idxs_test = <span class="built_in">list</span>(<span class="built_in">set</span>(all_idxs_test) - <span class="built_in">set</span>(dict_clients_test[i]))</span><br></pre></td></tr></table></figure>
+
+<h2 id="9-generate-noniid-mcf-data-dataset-dataset-test"><a href="#9-generate-noniid-mcf-data-dataset-dataset-test" class="headerlink" title="9. generate_noniid_mcf_data(dataset, dataset_test)"></a>9. generate_noniid_mcf_data(dataset, dataset_test)</h2><h3 id="step1：把索引号和标签组成一个二维列表（第一行为索引号，第二行为标签），并按标签的数字大小对二维列表的每一列进行重排（按从小到大顺序）。最后获取重排之后的索引号列表，即二维列表的第一行。"><a href="#step1：把索引号和标签组成一个二维列表（第一行为索引号，第二行为标签），并按标签的数字大小对二维列表的每一列进行重排（按从小到大顺序）。最后获取重排之后的索引号列表，即二维列表的第一行。" class="headerlink" title="step1：把索引号和标签组成一个二维列表（第一行为索引号，第二行为标签），并按标签的数字大小对二维列表的每一列进行重排（按从小到大顺序）。最后获取重排之后的索引号列表，即二维列表的第一行。"></a>step1：把索引号和标签组成一个二维列表（第一行为索引号，第二行为标签），并按标签的数字大小对二维列表的每一列进行重排（按从小到大顺序）。最后获取重排之后的索引号列表，即二维列表的第一行。</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">idxs = np.arange(<span class="built_in">len</span>(dataset), dtype=<span class="built_in">int</span>)</span><br><span class="line">labels = np.array(get_targets(dataset))</span><br><span class="line"><span class="comment"># labels = np.array(dataset.targets)</span></span><br><span class="line">unique_labels = np.unique(labels)</span><br><span class="line">num_classes = <span class="built_in">len</span>(unique_labels)</span><br><span class="line"></span><br><span class="line"><span class="comment"># sort labels</span></span><br><span class="line">idxs_labels = np.vstack((idxs, labels))</span><br><span class="line">idxs_labels = idxs_labels[:, idxs_labels[<span class="number">1</span>, :].argsort()]</span><br><span class="line"><span class="comment"># print(idxs_labels)</span></span><br><span class="line">idxs = idxs_labels[<span class="number">0</span>, :]</span><br><span class="line">idxs = idxs.astype(<span class="built_in">int</span>)</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>np.argsort(arr) 函数返回数组arr的值从小到大对应的索引值，np.argsort(-arr)则是从大到小<br>np.vstack() 将数组按垂直方向堆叠，堆叠后返回的数组，行数为每一个堆叠数组行数之和，列数与每一个堆叠数组列数相同。</p>
+</blockquote>
+<h3 id="step2-对于训练集和验证集都建立一个字典，在字典中每个客户端对应一个-np-array"><a href="#step2-对于训练集和验证集都建立一个字典，在字典中每个客户端对应一个-np-array" class="headerlink" title="step2: 对于训练集和验证集都建立一个字典，在字典中每个客户端对应一个 np.array"></a>step2: 对于训练集和验证集都建立一个字典，在字典中每个客户端对应一个 np.array</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">dict_users = &#123;i: np.array([], dtype=<span class="string">&quot;int64&quot;</span>) <span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(args.n_clients)&#125;</span><br><span class="line">dict_users_val = &#123;i: np.array([], dtype=<span class="string">&quot;int64&quot;</span>) <span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(args.n_clients)&#125;</span><br><span class="line">user_majority_labels = []</span><br></pre></td></tr></table></figure>
+
+<h3 id="step3-对于测试集重复步骤1、2"><a href="#step3-对于测试集重复步骤1、2" class="headerlink" title="step3: 对于测试集重复步骤1、2"></a>step3: 对于测试集重复步骤1、2</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">idxs_labels_test = np.vstack((idxs_test, labels_test))</span><br><span class="line">idxs_labels_test = idxs_labels_test[:, idxs_labels_test[<span class="number">1</span>, :].argsort()]</span><br><span class="line">idxs_test = idxs_labels_test[<span class="number">0</span>, :]</span><br><span class="line">idxs_test = idxs_test.astype(<span class="built_in">int</span>)</span><br><span class="line"></span><br><span class="line">dict_users_test = &#123;i: np.array([], dtype=<span class="string">&quot;int64&quot;</span>) <span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(args.n_clients)&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<h3 id="step4-把unique-labels-扩大-args-n-clients-x2F-num-classes-args-n-majority-classes-倍"><a href="#step4-把unique-labels-扩大-args-n-clients-x2F-num-classes-args-n-majority-classes-倍" class="headerlink" title="step4: 把unique_labels 扩大 (args.n_clients &#x2F; num_classes) * args.n_majority_classes 倍"></a>step4: 把unique_labels 扩大 (args.n_clients &#x2F; num_classes) * args.n_majority_classes 倍</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">label_list = np.tile(</span><br><span class="line">    unique_labels, math.ceil(args.n_clients / num_classes) * args.n_majority_classes</span><br><span class="line">)</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>np.tile() 将数组复制，第一个参数为需要复制的数组，第二个参数可以是一个数，也可以是一个元组，当是一个数时，将数组沿x轴复制，是一个元组则按元组内的数来，需要注意的是以（2，1）为例，是先将数组沿x轴复制一倍（相当于不变），再沿y轴复制2倍。<br>math.ceil() 将小数向上取整。</p>
+</blockquote>
+<h2 id="对每一个客户端执行-step5、6、7、8"><a href="#对每一个客户端执行-step5、6、7、8" class="headerlink" title="对每一个客户端执行 step5、6、7、8"></a>对每一个客户端执行 step5、6、7、8</h2><h3 id="step5、6相关数据："><a href="#step5、6相关数据：" class="headerlink" title="step5、6相关数据："></a>step5、6相关数据：</h3><p>dict_users: 一个字典，key为客户端编号，value为客户端 <strong>训练集</strong> 数据<br>dict_users_val：一个字典，key为客户端编号，value为客户端 <strong>验证集</strong> 数据<br>idxs：整个dataset对应的索引号列表<br>user_majority_labels: 一个二维数组，user_majority_labels[i] 代表第i个客户端所选中的 majority_classes 标签列表</p>
+<h3 id="step5"><a href="#step5" class="headerlink" title="step5:"></a>step5:</h3><p>如果label_list中不同标签的数量已经小于args.n_majority_classes，退出；反之，从label_list中有的标签种类中选出args.n_majority_classes个不同的标签，并且在label_list中删除与选中标签对应的元素，每个标签只删除第一个与之匹配的元素。将选中的标签列表append到user_majority_labels里面。</p>
+<p><strong>在完成step5之后，majority_labels 就代表当前客户端在整个数据集的unique_label_list 中选出来的 n_majority_classes 个label组成的列表</strong></p>
+<h3 id="step6："><a href="#step6：" class="headerlink" title="step6："></a>step6：</h3><p>对每个客户端所选择的 n_majority_classes个label 逐个进行以下操作（遍历majority_labels并进行操作）：</p>
+<ol>
+<li>获取dataset中label与当前遍历到的label相同的数据对应的索引编号（符合条件的编号组成列表 majority_labels_idxs）</li>
+<li>在 majority_labels_idxs 中随机不重复选取一定数量组成子集。（数量计算：[<strong>训练集</strong> 大小*majority_class在数据中占比]&#x2F;majority_class种类数目）</li>
+<li>使用np.concatenate() 将选出的子集 <strong>拼接</strong> 当前客户端对应的 dict_users.value 中。</li>
+<li>把筛选出的子集对应索引号从 idxs 中删掉</li>
+</ol>
+<p><strong>step5和step6主要完成了： 按照参数随机选取n_majority_classes个标签，并在每个标签对应的数据中随机挑选（[训练集大小*majority_class在数据中占比]&#x2F;majority_class种类数目 ）个数据组成某个客户端的训练集数据</strong></p>
+<h3 id="step7："><a href="#step7：" class="headerlink" title="step7："></a>step7：</h3><p>按照step5选出的 majority_labels 个标签，逐个在idxs列表中，仿照step6的步骤选出一定数量的数据，用作客户端的 <strong>验证集</strong><br>注：</p>
+<ol>
+<li>选取数量不同于step6, 为 [<strong>验证集</strong> 大小*majority_class在数据中占比]&#x2F;majority_class种类数目</li>
+<li>选出数据之后要用np.concatenate()将其拼接进入当前客户端对应的  dict_users_val.value</li>
+<li>拼接数据之后依旧要在idxs列表中删除所选数据编号</li>
+</ol>
+<h3 id="step8"><a href="#step8" class="headerlink" title="step8:"></a>step8:</h3><p>如同上面操作，为客户端选取测试集</p>
+<ol>
+<li>按照对应的label,其编号从 idxs_test 里选取</li>
+<li>选取数量为 [<strong>测试集</strong> 大小*majority_class在数据中占比]&#x2F;majority_class种类数目</li>
+<li>拼接数据之后，<strong>不用删除</strong> idxs_test中的数据</li>
+</ol>
+<h3 id="step9："><a href="#step9：" class="headerlink" title="step9："></a>step9：</h3><p>如果 majority_fraction &lt; 1.0 （即step6 和 step7 在选取的时候并 <strong>没有把数据全部取完__）对每个客户端有如下操作：<br>__当剩下的数据够用时(即：len(idxs) &gt;&#x3D; args.n_train_and_val * (1 - args.majority_fraction))</strong></p>
+<blockquote>
+<p>step8 的重要变量： non_majority_labels_idxs<br>其初始值为step6、7取完数据之后剩下的数据<br>通过step8，遍历 majority_labels 时，不断地将与 <strong>当前遍历到的标签不同的数据</strong> 与non_majority_labels_idxs去交集并重新赋值给non_majority_labels_idxs，让non_majority_labels_idxs不断变小，最终当一个客户端遍历完majority_labels时，non_majority_labels_idxs是剩下的数据中与majority_labels中标签完全不同的数据。</p>
+</blockquote>
+<ol>
+<li>遍历客户端对应的 majority_labels</li>
+<li>在剩下的数据中找与 <strong>当前遍历到的标签不同的数据</strong> ，利用set.intersection()与non_majority_labels_idxs取交集。最终在剩下的数据中找到与majority_labels完全不同的标签的数据。</li>
+<li>在第2点找到的数据中随机选取一定量的数据，拼接到客户端对应的 dict_users.value 中。</li>
+<li>注意拼接之后仍要删除对应的索引号。（拼接训练集和验证集需要删除，测试集不用删除）</li>
+</ol>
+<p><strong>当剩下的数据不够用时，直接将剩下的数据拼接到dict_user.value 和 dict_user_test.value中</strong></p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">print</span>(<span class="string">&quot;not enough data&quot;</span>)</span><br><span class="line">dict_users[i] = np.concatenate((dict_users[i], idxs))</span><br><span class="line">dict_users_test[i] = np.concatenate((dict_users_test[i], idxs_test))</span><br></pre></td></tr></table></figure>
+
+<h3 id="step10-统计每个客户端的数据分布"><a href="#step10-统计每个客户端的数据分布" class="headerlink" title="step10: 统计每个客户端的数据分布"></a>step10: 统计每个客户端的数据分布</h3><p>dict_label_dist： 字典，key：客户端编号； value: 该客户端的数据分布（一个一维列表，value[i] 表示 label&#x3D;&#x3D;i 的数据个数）</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">dict_label_dist = &#123;&#125;</span><br><span class="line"><span class="keyword">for</span> c <span class="keyword">in</span> <span class="built_in">range</span>(args.n_clients):</span><br><span class="line">    new_counts = np.zeros(num_classes, dtype=<span class="built_in">int</span>)</span><br><span class="line">    label_count = np.unique(np.array(labels)[dict_users[c]], return_counts=<span class="literal">True</span>)</span><br><span class="line">    <span class="keyword">for</span> i, label <span class="keyword">in</span> <span class="built_in">enumerate</span>(label_count[<span class="number">0</span>]):</span><br><span class="line">        new_counts[label] = label_count[<span class="number">1</span>][i]</span><br><span class="line">    dict_label_dist[c] = new_counts</span><br></pre></td></tr></table></figure>
+
+<p>由于 np.unique(…,return_counts&#x3D;True), 该函数返回值用 label_count 接收，则 label_count 是一个二维数组， 第一行是 label, 第二行是 该label对应的数据个数</p>
+<h2 id="10-generate-dirichlet-data"><a href="#10-generate-dirichlet-data" class="headerlink" title="10. generate_dirichlet_data()"></a>10. generate_dirichlet_data()</h2><p><strong>将传入函数的dataset和dataset_test生成迪利克雷分布，返回客户端对应训练集、验证集、测试集、标签分布的字典。</strong></p>
+<p>对于每个客户端执行以下步骤：</p>
+<h3 id="step1-用-np-random-dirichlet-获取迪利克雷分布"><a href="#step1-用-np-random-dirichlet-获取迪利克雷分布" class="headerlink" title="step1: 用 np.random.dirichlet() 获取迪利克雷分布"></a>step1: 用 np.random.dirichlet() 获取迪利克雷分布</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">label_distr = np.random.dirichlet(</span><br><span class="line">    args.alpha * np.ones(num_classes)</span><br><span class="line">) </span><br></pre></td></tr></table></figure>
+
+<h3 id="step2：利用生成的迪利克雷分布，计算训练集、验证集、测试集的标签分布"><a href="#step2：利用生成的迪利克雷分布，计算训练集、验证集、测试集的标签分布" class="headerlink" title="step2：利用生成的迪利克雷分布，计算训练集、验证集、测试集的标签分布"></a>step2：利用生成的迪利克雷分布，计算训练集、验证集、测试集的标签分布</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">label_distr_train = np.random.multinomial(</span><br><span class="line">    <span class="built_in">round</span>(args.n_train_and_val * (<span class="number">1</span> - args.val_proportion)), label_distr</span><br><span class="line">)</span><br><span class="line">label_distr_val = np.random.multinomial(</span><br><span class="line">    <span class="built_in">round</span>(args.n_train_and_val * args.val_proportion), label_distr</span><br><span class="line">)</span><br><span class="line">label_distr_test = np.random.multinomial(args.n_test, label_distr)</span><br><span class="line">dict_label_dist[c] = label_distr_train</span><br></pre></td></tr></table></figure>
+
+<h3 id="step3-遍历每一种标签，根据step2计算出的每种标签的数量，从idxs中选取数据并拼接进入-dict-users、-dict-users-val-并删除idxs中对idxs-test应数据；-从-idxs-test-中选数据拼接进入-dict-users-test-不用删除idxs-test中的数据。"><a href="#step3-遍历每一种标签，根据step2计算出的每种标签的数量，从idxs中选取数据并拼接进入-dict-users、-dict-users-val-并删除idxs中对idxs-test应数据；-从-idxs-test-中选数据拼接进入-dict-users-test-不用删除idxs-test中的数据。" class="headerlink" title="step3: 遍历每一种标签，根据step2计算出的每种标签的数量，从idxs中选取数据并拼接进入 dict_users、 dict_users_val 并删除idxs中对idxs_test应数据； 从 idxs_test 中选数据拼接进入 dict_users_test,不用删除idxs_test中的数据。"></a>step3: 遍历每一种标签，根据step2计算出的每种标签的数量，从idxs中选取数据并拼接进入 dict_users、 dict_users_val 并删除idxs中对idxs_test应数据； 从 idxs_test 中选数据拼接进入 dict_users_test,不用删除idxs_test中的数据。</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(num_classes):</span><br><span class="line">    <span class="keyword">try</span>:</span><br><span class="line">        <span class="comment"># if label_distr_train[i] &gt; 0:</span></span><br><span class="line">        sub_idx = np.random.choice(</span><br><span class="line">            idxs[labels[idxs] == i], label_distr_train[i], replace=<span class="literal">False</span></span><br><span class="line">        )  <span class="comment"># sample class i</span></span><br><span class="line">        dict_users[c] = np.concatenate((dict_users[c], sub_idx))</span><br><span class="line">        idxs = np.array(<span class="built_in">list</span>(<span class="built_in">set</span>(idxs) - <span class="built_in">set</span>(sub_idx)))</span><br><span class="line"></span><br><span class="line">        sub_idx_val = np.random.choice(</span><br><span class="line">            idxs[labels[idxs] == i], label_distr_val[i], replace=<span class="literal">False</span></span><br><span class="line">        )</span><br><span class="line">        dict_users_val[c] = np.concatenate((dict_users_val[c], sub_idx_val))</span><br><span class="line">        idxs = np.array(    <span class="built_in">list</span>(<span class="built_in">set</span>(idxs) - <span class="built_in">set</span>(sub_idx_val)))</span><br><span class="line"></span><br><span class="line">        sub_idx_test = np.random.choice(</span><br><span class="line">            idxs_test[labels_test[idxs_test] == i],</span><br><span class="line">            label_distr_test[i],</span><br><span class="line">            replace=<span class="literal">False</span>,</span><br><span class="line">        )</span><br><span class="line">        dict_users_test[c] = np.concatenate((dict_users_test[c], sub_idx_test))</span><br><span class="line">        <span class="comment"># idxs_test = np.array(list(set(idxs_test) - set(sub_idx_test)))</span></span><br><span class="line">    <span class="keyword">except</span>:</span><br><span class="line">        <span class="keyword">return</span> <span class="number">99</span>, <span class="number">99</span>, <span class="number">99</span>, <span class="number">99</span></span><br></pre></td></tr></table></figure>
+
+</article>
+    
+    
+</div>
+<div id="post-next-prev" class="row">
+    <div class="col-lg-12">
+        <!-- title -->
+        <h5 class="trm-title-with-divider">
+            其他文章
+            <span data-number="02"></span>
+        </h5>
+    </div>
+    
+        <div class="col-lg-6">
+    <div class="trm-blog-card trm-scroll-animation" data-scroll data-scroll-offset="40">
+        <a href="/2024/03/20/client-manager/" class="trm-cover-frame trm-anima-link">
+            
+            
+                <img alt="cover" class="no-fancybox" src="https://p4.itc.cn/q_70/images03/20210725/3717b3385e4e440ca6b6a44c05647b46.png">
+            
+        </a>
+        
+        <div class="trm-card-descr">
+            <div class="trm-label trm-category trm-mb-20">
+                <a href=" /categories/%E8%AE%BA%E6%96%87%E4%BB%A3%E7%A0%81%E8%A7%A3%E8%AF%BB/">
+                    论文代码解读
+                </a>
+            </div>
+            <h5>
+                <a href="/2024/03/20/client-manager/" class="trm-anima-link">
+                    client_manager
+                </a>
+            </h5>
+            <div class="trm-divider trm-mb-20 trm-mt-20"></div>
+            <ul class="trm-card-data trm-label">
+                <li>24/03/20</li>
+                <li>14:40</li>
+                
+                
+            </ul>
+        </div>
+    </div>
+</div>
+    
+    
+        <div class="col-lg-6">
+    <div class="trm-blog-card trm-scroll-animation" data-scroll data-scroll-offset="40">
+        <a href="/2023/03/18/bookManager/" class="trm-cover-frame trm-anima-link">
+            
+            
+                <img alt="cover" class="no-fancybox" src="https://bpic.588ku.com/back_origin_min_pic/20/11/06/b79d2cb1877b3a7f5188bcd4ce960943.jpg">
+            
+        </a>
+        
+        <div class="trm-card-descr">
+            <div class="trm-label trm-category trm-mb-20">
+                <a href=" /categories/%E9%A1%B9%E7%9B%AE%E5%BA%94%E7%94%A8/">
+                    项目应用
+                </a>
+            </div>
+            <h5>
+                <a href="/2023/03/18/bookManager/" class="trm-anima-link">
+                    图书管理系统(Java,Vue,SQL)
+                </a>
+            </h5>
+            <div class="trm-divider trm-mb-20 trm-mt-20"></div>
+            <ul class="trm-card-data trm-label">
+                <li>23/03/18</li>
+                <li>17:11</li>
+                
+                
+            </ul>
+        </div>
+    </div>
+</div>
+    
+</div>
+
+    
+
+
+
+                    <div class="trm-divider footer-divider"></div>
+
+                    <!-- footer -->
+                    <footer class="trm-scroll-animation" data-scroll data-scroll-offset="50">
+
+    
+
+    
+
+    
+        <div class="trm-footer-item">
+            <span>
+                由 <a href="https://hexo.io" target="_blank" rel="noopener">Hexo</a> 驱动 v6.3.0
+            </span>
+            <span class="footer-separator" data-separator=" | "></span>
+            <span> 
+                主题 - 
+                <a rel="noopener" href='https://github.com/MaLuns/hexo-theme-async' target='_blank'>Async</a>
+                v2.0.3
+            </span>
+        </div>
+      
+
+     
+
+     
+</footer>
+ 
+                    <!-- footer end -->
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+            <!-- body end -->
+
+            <div class="trm-fixed-container" data-scroll data-scroll-sticky data-scroll-target=".locomotive-scroll__sticky-target" data-scroll-offset="-10">
+    
+        <div class="trm-fixed-btn" data-title="阅读模式" onclick="asyncFun.switchReadMode()">
+            <i class="iconfont fas fa-book-reader"></i>
+        </div>
+    
+    
+    <div id="trm-back-top" class="trm-fixed-btn" data-title="回到顶部">
+        <i class="iconfont fas fa-arrow-up"></i>
+    </div>
+</div>
+          </div>
+        </div>
+      </div>
+      <!-- scroll container end -->
+
+  </div>
+  <!-- app wrapper end -->
+
+  
+  <!-- Plugin -->
+
+
+
+
+    
+    
+<script src="https://unpkg.com/locomotive-scroll@4.1.4/dist/locomotive-scroll.min.js"></script>
+
+    
+<script src="https://unpkg.com/@fancyapps/ui@4.0/dist/fancybox.umd.js"></script>
+
+    
+
+    
+        <script src="/js/plugins/typing.js?v=2.0.3"></script>
+    
+
+    
+
+    <!-- 数学公式 -->
+    
+
+    <!-- 评论插件 -->
+    
+        
+
+        
+    
+
+
+
+<!-- CDN -->
+
+
+    
+
+    
+
+    
+
+
+
+
+    <!-- Service Worker -->
+    
+    <!-- baidu push -->
+    
+
+
+<script id="async-script" src="/js/main.js?v=2.0.3"></script>
+
+</body>
+
+</html>
